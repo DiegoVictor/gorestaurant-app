@@ -1,10 +1,9 @@
 import React from 'react';
-
 import { render, wait } from '@testing-library/react-native';
 import AxiosMock from 'axios-mock-adapter';
-import api from '../../services/api';
 
-import Orders from '../../pages/Orders';
+import api from '../../src/services/api';
+import Favorites from '../../src/pages/Favorites';
 
 const mockedNavigate = jest.fn();
 
@@ -17,10 +16,10 @@ jest.mock('@react-navigation/native', () => {
   };
 });
 
-const apiMock = new AxiosMock(api);
+describe('Favorites', () => {
+  const apiMock = new AxiosMock(api);
 
-describe('Orders', () => {
-  it('should be able to list the orders', async () => {
+  it('should be able to list the favorite food plates', async () => {
     const items = [
       {
         id: 1,
@@ -67,9 +66,9 @@ describe('Orders', () => {
       },
     ];
 
-    apiMock.onGet('/orders').reply(200, items);
+    apiMock.onGet('/favorites').reply(200, items);
 
-    const { getByText } = render(<Orders />);
+    const { getByText } = render(<Favorites />);
 
     await wait(() => expect(getByText('Ao molho')).toBeTruthy(), {
       timeout: 200,

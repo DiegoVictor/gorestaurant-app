@@ -1,13 +1,12 @@
 import React from 'react';
-
 import '@testing-library/jest-native';
 import { render, wait, act, fireEvent } from '@testing-library/react-native';
 import AxiosMock from 'axios-mock-adapter';
-import api from '../../services/api';
 
-import FoodDetails from '../../pages/FoodDetails';
+import api from '../../src/services/api';
+import FoodDetails from '../../src/pages/FoodDetails';
 
-jest.mock('../../utils/formatValue.ts', () => ({
+jest.mock('../../src/utils/formatValue.ts', () => ({
   __esModule: true,
   default: jest.fn().mockImplementation((value: number) => {
     switch (value) {
@@ -43,9 +42,13 @@ jest.mock('@react-navigation/native', () => {
   };
 });
 
-const apiMock = new AxiosMock(api);
-
 describe('FoodDetails', () => {
+  const apiMock = new AxiosMock(api);
+
+  beforeEach(() => {
+    mockedNavigate.mockClear();
+  });
+
   it('should be able to list the food', async () => {
     const item = {
       id: 1,
@@ -72,7 +75,11 @@ describe('FoodDetails', () => {
       ],
     };
 
-    apiMock.onGet('/foods/1').reply(200, item);
+    apiMock
+      .onGet('/foods/1')
+      .reply(200, item)
+      .onGet('/favorites/1')
+      .reply(200, item);
 
     const { getByText, getByTestId } = render(<FoodDetails />);
 
@@ -408,5 +415,62 @@ describe('FoodDetails', () => {
     expect(getByTestId('extra-quantity-1')).toHaveTextContent('1');
 
     expect(getByTestId('cart-total')).toHaveTextContent('R$ 21,40');
+  });
+
+  it('should be able to finish the order', async () => {
+    const item = {
+      id: 1,
+      name: 'Ao molho',
+      description:
+        'Macarrão ao molho branco, fughi e cheiro verde das montanhas.',
+      price: 19.9,
+      category: 1,
+      image_url:
+        'https://storage.googleapis.com/golden-wind/bootcamp-gostack/desafio-food/food1.png',
+      thumbnail_url:
+        'https://storage.googleapis.com/golden-wind/bootcamp-gostack/desafio-gorestaurant-mobile/ao_molho.png',
+      extras: [
+        {
+          id: 1,
+          name: 'Bacon',
+          value: 1.5,
+        },
+        {
+          id: 2,
+          name: 'Frango',
+          value: 2,
+        },
+      ],
+    };
+
+    apiMock
+      .onGet('/foods/1')
+      .reply(200, item)
+      .onPost('orders')
+      .reply(200, item);
+
+    const { getByText, getByTestId } = render(<FoodDetails />);
+
+    await wait(() => expect(getByText('Ao molho')).toBeTruthy(), {
+      timeout: 200,
+    });
+
+    expect(getByText('Ao molho')).toBeTruthy();
+    expect(
+      getByText(
+        'Macarrão ao molho branco, fughi e cheiro verde das montanhas.',
+      ),
+    ).toBeTruthy();
+
+    expect(getByText('Bacon')).toBeTruthy();
+    expect(getByText('Frango')).toBeTruthy();
+    expect(getByTestId('food-quantity')).toHaveTextContent('1');
+    expect(getByTestId('cart-total')).toHaveTextContent('R$ 19,90');
+
+    await act(async () => {
+      fireEvent.press(getByTestId('finish'));
+    });
+
+    expect(mockedNavigate).toHaveBeenCalledWith('Dashboard');
   });
 });

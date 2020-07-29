@@ -1,10 +1,9 @@
 import React from 'react';
-
 import { render, fireEvent, act, wait } from '@testing-library/react-native';
 import AxiosMock from 'axios-mock-adapter';
-import api from '../../services/api';
 
-import Dashboard from '../../pages/Dashboard';
+import api from '../../src/services/api';
+import Dashboard from '../../src/pages/Dashboard';
 
 const mockedNavigate = jest.fn();
 
@@ -17,9 +16,23 @@ jest.mock('@react-navigation/native', () => {
   };
 });
 
-const apiMock = new AxiosMock(api);
-
 describe('Dashboard', () => {
+  const apiMock = new AxiosMock(api);
+
+  beforeEach(() => {
+    mockedNavigate.mockClear();
+  });
+
+  it('should be able to back to home', () => {
+    apiMock.onGet('/categories').reply(200, []).onGet('/foods').reply(200, []);
+
+    const { getByTestId } = render(<Dashboard />);
+
+    fireEvent.press(getByTestId('back'));
+
+    expect(mockedNavigate).toHaveBeenCalledWith('Home');
+  });
+
   it('should be able to list the food plates', async () => {
     const items = [
       {
@@ -67,24 +80,26 @@ describe('Dashboard', () => {
       },
     ];
 
-    apiMock.onGet('/categories').reply(200, [
-      {
-        id: 1,
-        title: 'Massas',
-        image_url:
-          'https://storage.googleapis.com/golden-wind/bootcamp-gostack/desafio-gorestaurant-mobile/massas.png',
-      },
-    ]);
+    apiMock
+      .onGet('/categories')
+      .reply(200, [
+        {
+          id: 1,
+          title: 'Massas',
+          image_url:
+            'https://storage.googleapis.com/golden-wind/bootcamp-gostack/desafio-gorestaurant-mobile/massas.png',
+        },
+      ])
+      .onGet('/foods')
+      .reply(config => {
+        if (config.params.name_like === '') {
+          return [200, items];
+        }
 
-    apiMock.onGet('/foods').reply(config => {
-      if (config.params.name_like === '') {
         return [200, items];
-      }
-
-      return [200, items];
-    });
-
-    apiMock.onGet('/foods?name_like=').reply(200, items);
+      })
+      .onGet('/foods?name_like=')
+      .reply(200, items);
 
     const { getByText } = render(<Dashboard />);
 
@@ -217,23 +232,26 @@ describe('Dashboard', () => {
       },
     ];
 
-    apiMock.onGet('/foods').reply(config => {
-      switch (config.params.category_like) {
-        case 1:
-          return [200, categoryOneItems];
+    apiMock
+      .onGet('/foods')
+      .reply(config => {
+        switch (config.params.category_like) {
+          case 1:
+            return [200, categoryOneItems];
 
-        case 2:
-          return [200, categoryTwoItems];
+          case 2:
+            return [200, categoryTwoItems];
 
-        default:
-          return [200, items];
-      }
-    });
-
-    apiMock.onGet('/foods?category_like=1').reply(200, categoryOneItems);
-    apiMock.onGet('/foods?category_like=2').reply(200, categoryTwoItems);
-
-    apiMock.onGet('/categories').reply(200, categories);
+          default:
+            return [200, items];
+        }
+      })
+      .onGet('/foods?category_like=1')
+      .reply(200, categoryOneItems)
+      .onGet('/foods?category_like=2')
+      .reply(200, categoryTwoItems)
+      .onGet('/categories')
+      .reply(200, categories);
 
     const { getByText, queryByText, getByTestId } = render(<Dashboard />);
 
@@ -381,28 +399,28 @@ describe('Dashboard', () => {
       },
     ];
 
-    apiMock.onGet('/foods').reply(config => {
-      switch (config.params.name_like) {
-        case 'Ao molho':
-          return [200, aoMolhoSearchResult];
+    apiMock
+      .onGet('/foods')
+      .reply(config => {
+        switch (config.params.name_like) {
+          case 'Ao molho':
+            return [200, aoMolhoSearchResult];
 
-        case 'Veggie':
-          return [200, veggieSearchResult];
+          case 'Veggie':
+            return [200, veggieSearchResult];
 
-        default:
-          return [200, items];
-      }
-    });
+          default:
+            return [200, items];
+        }
+      })
+      .onGet('/foods?name_like=Ao molho')
+      .reply(200, aoMolhoSearchResult)
+      .onGet('/foods?name_like=Veggie')
+      .reply(200, veggieSearchResult)
+      .onGet('/categories')
+      .reply(200, categories);
 
-    apiMock.onGet('/foods?name_like=Ao molho').reply(200, aoMolhoSearchResult);
-
-    apiMock.onGet('/foods?name_like=Veggie').reply(200, veggieSearchResult);
-
-    apiMock.onGet('/categories').reply(200, categories);
-
-    const { getByText, queryByText, getByTestId, debug } = render(
-      <Dashboard />,
-    );
+    const { getByText, queryByText, getByTestId } = render(<Dashboard />);
 
     await wait(() => expect(getByText('Massas')).toBeTruthy(), {
       timeout: 200,
@@ -488,24 +506,26 @@ describe('Dashboard', () => {
       },
     ];
 
-    apiMock.onGet('/categories').reply(200, [
-      {
-        id: 1,
-        title: 'Massas',
-        image_url:
-          'https://storage.googleapis.com/golden-wind/bootcamp-gostack/desafio-gorestaurant-mobile/massas.png',
-      },
-    ]);
+    apiMock
+      .onGet('/categories')
+      .reply(200, [
+        {
+          id: 1,
+          title: 'Massas',
+          image_url:
+            'https://storage.googleapis.com/golden-wind/bootcamp-gostack/desafio-gorestaurant-mobile/massas.png',
+        },
+      ])
+      .onGet('/foods')
+      .reply(config => {
+        if (config.params.name_like === '') {
+          return [200, items];
+        }
 
-    apiMock.onGet('/foods').reply(config => {
-      if (config.params.name_like === '') {
         return [200, items];
-      }
-
-      return [200, items];
-    });
-
-    apiMock.onGet('/foods?name_like=').reply(200, items);
+      })
+      .onGet('/foods?name_like=')
+      .reply(200, items);
 
     const { getByText, getByTestId } = render(<Dashboard />);
 
