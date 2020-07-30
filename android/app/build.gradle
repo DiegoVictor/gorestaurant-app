@@ -129,7 +129,7 @@ android {
     }
 
     defaultConfig {
-        applicationId "com.challenge11"
+        applicationId "com.gorestaurant"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1

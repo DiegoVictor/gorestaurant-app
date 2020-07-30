@@ -1,4 +1,4 @@
-package com.challenge11;
+package com.gorestaurant;
 
 import com.facebook.react.ReactActivity;
 
@@ -10,6 +10,6 @@ public class MainActivity extends ReactActivity {
    */
   @Override
   protected String getMainComponentName() {
-    return "challenge11";
+    return "gorestaurant";
   }
 }
