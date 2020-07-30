@@ -1,7 +1,9 @@
 import axios from 'axios';
+// eslint-disable-next-line import/no-unresolved
+import { API_URL } from '@env';
 
 const api = axios.create({
-  baseURL: 'http://localhost:3333',
+  baseURL: API_URL,
 });
 
 export default api;
