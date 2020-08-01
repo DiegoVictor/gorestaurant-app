@@ -1,19 +1,10 @@
-import React, {
-  useEffect,
-  useState,
-  useCallback,
-  useMemo,
-  useLayoutEffect,
-} from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import { Image } from 'react-native';
-
 import Icon from 'react-native-vector-icons/Feather';
-import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import { useNavigation, useRoute } from '@react-navigation/native';
+
 import formatValue from '../../utils/formatValue';
-
 import api from '../../services/api';
-
 import {
   Container,
   Header,
@@ -65,7 +56,6 @@ interface Food {
 const FoodDetails: React.FC = () => {
   const [food, setFood] = useState({} as Food);
   const [extras, setExtras] = useState<Extra[]>([]);
-  const [isFavorite, setIsFavorite] = useState(false);
   const [foodQuantity, setFoodQuantity] = useState(1);
 
   const navigation = useNavigation();
@@ -79,11 +69,6 @@ const FoodDetails: React.FC = () => {
 
       setFood({ ...data, formattedPrice: formatValue(data.price) });
       setExtras(data.extras.map(extra => ({ ...extra, quantity: 0 })));
-
-      const { data: favorite } = await api.get(`/favorites/${data.id}`);
-      if (favorite) {
-        setIsFavorite(true);
-      }
     }
 
     loadFood();
@@ -116,32 +101,6 @@ const FoodDetails: React.FC = () => {
     }
   }
 
-  const toggleFavorite = useCallback(async () => {
-    if (isFavorite) {
-      await api.delete(`/favorites/${food.id}`);
-    } else {
-      const {
-        id,
-        name,
-        description,
-        price,
-        category,
-        image_url,
-        thumbnail_url,
-      } = food;
-      await api.post('favorites', {
-        id,
-        name,
-        description,
-        price,
-        category,
-        image_url,
-        thumbnail_url,
-      });
-    }
-    setIsFavorite(state => !state);
-  }, [isFavorite, food]);
-
   const cartTotal = useMemo(() => {
     return formatValue(
       food.price * foodQuantity +
@@ -162,26 +121,6 @@ const FoodDetails: React.FC = () => {
     });
     navigation.navigate('Dashboard');
   }
-
-  // Calculate the correct icon name
-  const favoriteIconName = useMemo(
-    () => (isFavorite ? 'favorite' : 'favorite-border'),
-    [isFavorite],
-  );
-
-  useLayoutEffect(() => {
-    // Add the favorite icon on the right of the header bar
-    navigation.setOptions({
-      headerRight: () => (
-        <MaterialIcon
-          name={favoriteIconName}
-          size={24}
-          color="#FFB84D"
-          onPress={() => toggleFavorite()}
-        />
-      ),
-    });
-  }, [navigation, favoriteIconName, toggleFavorite]);
 
   return (
     <Container>
@@ -257,7 +196,10 @@ const FoodDetails: React.FC = () => {
             </QuantityContainer>
           </PriceButtonContainer>
 
-          <FinishOrderButton onPress={() => handleFinishOrder()}>
+          <FinishOrderButton
+            testID="finish"
+            onPress={() => handleFinishOrder()}
+          >
             <ButtonText>Confirmar pedido</ButtonText>
             <IconContainer>
               <Icon name="check-square" size={24} color="#fff" />
