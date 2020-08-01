@@ -40,6 +40,13 @@ describe('SearchInput', () => {
     expect(container).toHaveStyleRule('border-color', '#c72828');
   });
 
+  it('should be able to render without previous value', async () => {
+    const { getByTestId } = render(<SearchInput />);
+    const inputSearch = getByTestId('search-input');
+
+    expect(inputSearch).toBeTruthy();
+  });
+
   it('should be able highlight the icon when input is filled', async () => {
     const { getByTestId } = render(<SearchInput value="Veggie" />);
 
