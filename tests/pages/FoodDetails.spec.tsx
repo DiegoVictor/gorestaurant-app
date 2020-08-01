@@ -417,6 +417,55 @@ describe('FoodDetails', () => {
     expect(getByTestId('cart-total')).toHaveTextContent('R$ 21,40');
   });
 
+  it('should not be able to decrement an extra item quantity below than 0', async () => {
+    const item = {
+      id: 1,
+      name: 'Ao molho',
+      description:
+        'Macarrão ao molho branco, fughi e cheiro verde das montanhas.',
+      price: 19.9,
+      category: 1,
+      image_url:
+        'https://storage.googleapis.com/golden-wind/bootcamp-gostack/desafio-food/food1.png',
+      thumbnail_url:
+        'https://storage.googleapis.com/golden-wind/bootcamp-gostack/desafio-gorestaurant-mobile/ao_molho.png',
+      extras: [
+        {
+          id: 1,
+          name: 'Bacon',
+          value: 1.5,
+        },
+      ],
+    };
+
+    apiMock.onGet('/foods/1').reply(200, item);
+
+    const { getByText, getByTestId } = render(<FoodDetails />);
+
+    await wait(() => expect(getByText('Ao molho')).toBeTruthy(), {
+      timeout: 200,
+    });
+
+    expect(getByText('Ao molho')).toBeTruthy();
+    expect(
+      getByText(
+        'Macarrão ao molho branco, fughi e cheiro verde das montanhas.',
+      ),
+    ).toBeTruthy();
+
+    expect(getByText('Bacon')).toBeTruthy();
+
+    expect(getByTestId('extra-quantity-1')).toHaveTextContent('0');
+
+    await act(async () => {
+      fireEvent.press(getByTestId('decrement-extra-1'));
+    });
+
+    expect(getByTestId('extra-quantity-1')).toHaveTextContent('0');
+
+    expect(getByTestId('cart-total')).toHaveTextContent('R$ 19,90');
+  });
+
   it('should be able to finish the order', async () => {
     const item = {
       id: 1,
