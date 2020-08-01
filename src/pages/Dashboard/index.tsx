@@ -84,8 +84,10 @@ const Dashboard: React.FC = () => {
       );
     }
 
-    loadFoods();
-  }, [selectedCategory, searchValue]);
+    if (categories.length > 0) {
+      loadFoods();
+    }
+  }, [selectedCategory, searchValue, categories]);
 
   useEffect(() => {
     async function loadCategories(): Promise<void> {
@@ -105,6 +107,7 @@ const Dashboard: React.FC = () => {
       <Header>
         <Image source={Logo} />
         <Icon
+          testID="back"
           name="log-out"
           size={24}
           color="#FFB84D"
