@@ -1,10 +1,10 @@
 import React from 'react';
 import { Image } from 'react-native';
-
 import { useNavigation } from '@react-navigation/native';
-
 import Icon from 'react-native-vector-icons/Feather';
 
+import Background from '../../assets/home-background.png';
+import Logo from '../../assets/logo.png';
 import {
   Container,
   BackgroundImage,
@@ -13,9 +13,6 @@ import {
   ButtonText,
   IconContainer,
 } from './styles';
-
-import Background from '../../assets/home-background.png';
-import Logo from '../../assets/logo.png';
 
 const Home: React.FC = () => {
   const navigation = useNavigation();
