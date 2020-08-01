@@ -22,8 +22,9 @@ const SearchInput: React.FC<InputProps> = ({ value = '', ...rest }) => {
   }, [value]);
 
   return (
-    <Container isFocused={isFocused}>
+    <Container testID="search-container" isFocused={isFocused}>
       <Icon
+        testID="search-icon"
         name="search"
         size={20}
         color={isFocused || isFilled ? '#c72828' : '#b7b7cc'}
