@@ -4,6 +4,24 @@ import AxiosMock from 'axios-mock-adapter';
 
 import api from '../../src/services/api';
 import Orders from '../../src/pages/Orders';
+import factory from '../utils/factory';
+
+interface Order {
+  id: number;
+  name: string;
+  description: string;
+  price: number;
+  category: number;
+  image_url: string;
+  thumbnail_url: string;
+  extras: [
+    {
+      id: number;
+      name: string;
+      value: number;
+    },
+  ];
+}
 
 const mockedNavigate = jest.fn();
 
@@ -20,71 +38,19 @@ describe('Orders', () => {
   const apiMock = new AxiosMock(api);
 
   it('should be able to list the orders', async () => {
-    const items = [
-      {
-        id: 1,
-        name: 'Ao molho',
-        description:
-          'Macarrão ao molho branco, fughi e cheiro verde das montanhas.',
-        price: 19.9,
-        category: 1,
-        image_url:
-          'https://storage.googleapis.com/golden-wind/bootcamp-gostack/desafio-food/food1.png',
-        thumbnail_url:
-          'https://storage.googleapis.com/golden-wind/bootcamp-gostack/desafio-gorestaurant-mobile/ao_molho.png',
-        extras: [
-          {
-            id: 1,
-            name: 'Bacon',
-            value: 1.5,
-          },
-          {
-            id: 2,
-            name: 'Frango',
-            value: 2,
-          },
-        ],
-      },
-      {
-        id: 2,
-        name: 'Veggie',
-        description:
-          'Macarrão com pimentão, ervilha e ervas finas colhidas no himalaia.',
-        price: '21.90',
-        category: 2,
-        image_url:
-          'https://storage.googleapis.com/golden-wind/bootcamp-gostack/desafio-food/food2.png',
-        thumbnail_url:
-          'https://storage.googleapis.com/golden-wind/bootcamp-gostack/desafio-gorestaurant-mobile/veggie.png',
-        extras: [
-          {
-            id: 3,
-            name: 'Bacon',
-            value: 1.5,
-          },
-        ],
-      },
-    ];
+    const orders = await factory.attrsMany<Order>('Order', 2);
 
-    apiMock.onGet('/orders').reply(200, items);
+    apiMock.onGet('/orders').reply(200, orders);
 
     const { getByText } = render(<Orders />);
 
-    await wait(() => expect(getByText('Ao molho')).toBeTruthy(), {
+    await wait(() => expect(getByText(orders[0].name)).toBeTruthy(), {
       timeout: 200,
     });
 
-    expect(getByText('Ao molho')).toBeTruthy();
-    expect(
-      getByText(
-        'Macarrão ao molho branco, fughi e cheiro verde das montanhas.',
-      ),
-    ).toBeTruthy();
-    expect(getByText('Veggie')).toBeTruthy();
-    expect(
-      getByText(
-        'Macarrão com pimentão, ervilha e ervas finas colhidas no himalaia.',
-      ),
-    ).toBeTruthy();
+    orders.forEach(order => {
+      expect(getByText(order.name)).toBeTruthy();
+      expect(getByText(order.description)).toBeTruthy();
+    });
   });
 });
