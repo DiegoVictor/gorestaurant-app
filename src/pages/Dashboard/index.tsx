@@ -90,12 +90,10 @@ const Dashboard: React.FC = () => {
   }, [selectedCategory, searchValue, categories]);
 
   useEffect(() => {
-    async function loadCategories(): Promise<void> {
+    (async () => {
       const { data } = await api.get('categories');
       setCategories(data);
-    }
-
-    loadCategories();
+    })();
   }, []);
 
   function handleSelectCategory(id: number): void {
