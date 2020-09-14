@@ -1,8 +1,7 @@
 import React from 'react';
-
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-
 import Icon from 'react-native-vector-icons/Feather';
+
 import Dashboard from '../pages/Dashboard';
 import Favorites from '../pages/Favorites';
 import Orders from '../pages/Orders';

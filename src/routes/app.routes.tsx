@@ -3,8 +3,8 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { NavigationContainer } from '@react-navigation/native';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import Icon from 'react-native-vector-icons/Feather';
-
 import { Alert } from 'react-native';
+
 import api from '../services/api';
 import TabRoutes from './tab.routes';
 import Home from '../pages/Home';
