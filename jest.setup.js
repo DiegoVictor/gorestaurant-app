@@ -3,9 +3,9 @@ import React from 'react';
 jest.mock(
   'react-native/Libraries/Components/Touchable/TouchableOpacity.js',
   () => {
-    const {TouchableHighlight} = require('react-native'); // eslint-disable-line
+    const { TouchableHighlight } = require('react-native'); // eslint-disable-line
 
-    const MockTouchable = (props) => {
+    const MockTouchable = props => {
       return <TouchableHighlight {...props} />;
     };
 
