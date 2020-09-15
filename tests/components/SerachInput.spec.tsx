@@ -33,11 +33,11 @@ describe('SearchInput', () => {
     const container = getByTestId('search-container');
     const inputSearch = getByTestId('search-input');
 
-    expect(container).toHaveStyleRule('border-color', '#f0f0f5');
+    expect(container).toHaveStyle({ borderColor: '#f0f0f5' });
 
     fireEvent.focus(inputSearch);
 
-    expect(container).toHaveStyleRule('border-color', '#c72828');
+    expect(container).toHaveStyle({ borderColor: '#c72828' });
   });
 
   it('should be able to render without previous value', async () => {
@@ -53,10 +53,10 @@ describe('SearchInput', () => {
     const inputSearch = getByTestId('search-input');
     const icon = getByTestId('search-icon');
 
-    expect(icon).toHaveStyleRule('color', '#b7b7cc');
+    expect(icon).toHaveStyle({ color: '#b7b7cc' });
 
     fireEvent.blur(inputSearch);
 
-    expect(icon).toHaveStyleRule('color', '#c72828');
+    expect(icon).toHaveStyle({ color: '#c72828' });
   });
 });
