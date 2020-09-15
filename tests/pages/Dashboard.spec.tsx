@@ -4,6 +4,30 @@ import AxiosMock from 'axios-mock-adapter';
 
 import api from '../../src/services/api';
 import Dashboard from '../../src/pages/Dashboard';
+import factory from '../utils/factory';
+
+interface Order {
+  id: number;
+  name: string;
+  description: string;
+  price: number;
+  category: number;
+  image_url: string;
+  thumbnail_url: string;
+  extras: Extra[];
+}
+
+interface Extra {
+  id: number;
+  name: string;
+  value: number;
+}
+
+interface Category {
+  id: number;
+  title: string;
+  image_url: string;
+}
 
 const mockedNavigate = jest.fn();
 
@@ -23,526 +47,190 @@ describe('Dashboard', () => {
     mockedNavigate.mockClear();
   });
 
-  it('should be able to back to home', () => {
+  it('should be able to back to home', async () => {
     apiMock.onGet('/categories').reply(200, []).onGet('/foods').reply(200, []);
 
     const { getByTestId } = render(<Dashboard />);
 
-    fireEvent.press(getByTestId('back'));
+    await act(async () => {
+      fireEvent.press(getByTestId('back'));
+    });
 
     expect(mockedNavigate).toHaveBeenCalledWith('Home');
   });
 
   it('should be able to list the food plates', async () => {
-    const items = [
-      {
-        id: 1,
-        name: 'Ao molho',
-        description:
-          'Macarrão ao molho branco, fughi e cheiro verde das montanhas.',
-        price: 19.9,
-        category: 1,
-        image_url:
-          'https://storage.googleapis.com/golden-wind/bootcamp-gostack/desafio-food/food1.png',
-        thumbnail_url:
-          'https://storage.googleapis.com/golden-wind/bootcamp-gostack/desafio-gorestaurant-mobile/ao_molho.png',
-        extras: [
-          {
-            id: 1,
-            name: 'Bacon',
-            value: 1.5,
-          },
-          {
-            id: 2,
-            name: 'Frango',
-            value: 2,
-          },
-        ],
-      },
-      {
-        id: 2,
-        name: 'Veggie',
-        description:
-          'Macarrão com pimentão, ervilha e ervas finas colhidas no himalaia.',
-        price: '21.90',
-        category: 2,
-        image_url:
-          'https://storage.googleapis.com/golden-wind/bootcamp-gostack/desafio-food/food2.png',
-        thumbnail_url:
-          'https://storage.googleapis.com/golden-wind/bootcamp-gostack/desafio-gorestaurant-mobile/veggie.png',
-        extras: [
-          {
-            id: 3,
-            name: 'Bacon',
-            value: 1.5,
-          },
-        ],
-      },
-    ];
+    const category = await factory.attrs<Category>('Category');
+    const order = await factory.attrs<Order>('Order');
 
     apiMock
       .onGet('/categories')
-      .reply(200, [
-        {
-          id: 1,
-          title: 'Massas',
-          image_url:
-            'https://storage.googleapis.com/golden-wind/bootcamp-gostack/desafio-gorestaurant-mobile/massas.png',
-        },
-      ])
+      .reply(200, [category])
       .onGet('/foods')
-      .reply(config => {
-        if (config.params.name_like === '') {
-          return [200, items];
-        }
-
-        return [200, items];
-      })
-      .onGet('/foods?name_like=')
-      .reply(200, items);
+      .reply(200, [order]);
 
     const { getByText } = render(<Dashboard />);
 
-    await wait(() => expect(getByText('Ao molho')).toBeTruthy(), {
+    await wait(() => expect(getByText(order.name)).toBeTruthy(), {
       timeout: 200,
     });
 
-    expect(getByText('Ao molho')).toBeTruthy();
-    expect(
-      getByText(
-        'Macarrão ao molho branco, fughi e cheiro verde das montanhas.',
-      ),
-    ).toBeTruthy();
-    expect(getByText('Veggie')).toBeTruthy();
-    expect(
-      getByText(
-        'Macarrão com pimentão, ervilha e ervas finas colhidas no himalaia.',
-      ),
-    ).toBeTruthy();
+    expect(getByText(order.name)).toBeTruthy();
+    expect(getByText(order.description)).toBeTruthy();
   });
 
   it('should be able to list the food plates filtered by category', async () => {
-    const items = [
-      {
-        id: 1,
-        name: 'Ao molho',
-        description:
-          'Macarrão ao molho branco, fughi e cheiro verde das montanhas.',
-        price: 19.9,
-        category: 1,
-        image_url:
-          'https://storage.googleapis.com/golden-wind/bootcamp-gostack/desafio-food/food1.png',
-        thumbnail_url:
-          'https://storage.googleapis.com/golden-wind/bootcamp-gostack/desafio-gorestaurant-mobile/ao_molho.png',
-        extras: [
-          {
-            id: 1,
-            name: 'Bacon',
-            value: 1.5,
-          },
-          {
-            id: 2,
-            name: 'Frango',
-            value: 2,
-          },
-        ],
-      },
-      {
-        id: 2,
-        name: 'Veggie',
-        description:
-          'Macarrão com pimentão, ervilha e ervas finas colhidas no himalaia.',
-        price: '21.90',
-        category: 2,
-        image_url:
-          'https://storage.googleapis.com/golden-wind/bootcamp-gostack/desafio-food/food2.png',
-        thumbnail_url:
-          'https://storage.googleapis.com/golden-wind/bootcamp-gostack/desafio-gorestaurant-mobile/veggie.png',
-        extras: [
-          {
-            id: 3,
-            name: 'Bacon',
-            value: 1.5,
-          },
-        ],
-      },
-    ];
-
-    const categoryOneItems = [
-      {
-        id: 1,
-        name: 'Ao molho',
-        description:
-          'Macarrão ao molho branco, fughi e cheiro verde das montanhas.',
-        price: 19.9,
-        category: 1,
-        image_url:
-          'https://storage.googleapis.com/golden-wind/bootcamp-gostack/desafio-food/food1.png',
-        thumbnail_url:
-          'https://storage.googleapis.com/golden-wind/bootcamp-gostack/desafio-gorestaurant-mobile/ao_molho.png',
-        extras: [
-          {
-            id: 1,
-            name: 'Bacon',
-            value: 1.5,
-          },
-          {
-            id: 2,
-            name: 'Frango',
-            value: 2,
-          },
-        ],
-      },
-    ];
-
-    const categoryTwoItems = [
-      {
-        id: 2,
-        name: 'Veggie',
-        description:
-          'Macarrão com pimentão, ervilha e ervas finas colhidas no himalaia.',
-        price: '21.90',
-        category: 2,
-        image_url:
-          'https://storage.googleapis.com/golden-wind/bootcamp-gostack/desafio-food/food2.png',
-        thumbnail_url:
-          'https://storage.googleapis.com/golden-wind/bootcamp-gostack/desafio-gorestaurant-mobile/veggie.png',
-        extras: [
-          {
-            id: 3,
-            name: 'Bacon',
-            value: 1.5,
-          },
-        ],
-      },
-    ];
-
-    const categories = [
-      {
-        id: 1,
-        title: 'Massas',
-        image_url:
-          'https://storage.googleapis.com/golden-wind/bootcamp-gostack/desafio-gorestaurant-mobile/massas.png',
-      },
-      {
-        id: 2,
-        title: 'Pizzas',
-        image_url:
-          'https://storage.googleapis.com/golden-wind/bootcamp-gostack/desafio-gorestaurant-mobile/pizzas.png',
-      },
-    ];
+    const categories = await factory.attrsMany<Category>('Category', 2);
+    const [category] = categories;
+    const orders = await factory.attrsMany<Order>(
+      'Order',
+      2,
+      categories.map(({ id }) => ({ category: id })),
+    );
 
     apiMock
       .onGet('/foods')
       .reply(config => {
-        switch (config.params.category_like) {
-          case 1:
-            return [200, categoryOneItems];
-
-          case 2:
-            return [200, categoryTwoItems];
-
-          default:
-            return [200, items];
+        if (config.params.category_like) {
+          return [
+            200,
+            orders.filter(
+              order => order.category === config.params.category_like,
+            ),
+          ];
         }
+        return [200, orders];
       })
-      .onGet('/foods?category_like=1')
-      .reply(200, categoryOneItems)
-      .onGet('/foods?category_like=2')
-      .reply(200, categoryTwoItems)
       .onGet('/categories')
       .reply(200, categories);
 
     const { getByText, queryByText, getByTestId } = render(<Dashboard />);
 
-    await wait(() => expect(getByText('Massas')).toBeTruthy(), {
+    await wait(() => expect(getByText(category.title)).toBeTruthy(), {
       timeout: 200,
     });
 
-    expect(getByText('Massas')).toBeTruthy();
-    expect(getByText('Pizzas')).toBeTruthy();
-
-    expect(getByText('Ao molho')).toBeTruthy();
-    expect(getByText('Veggie')).toBeTruthy();
-
-    await act(async () => {
-      fireEvent.press(getByTestId('category-1'));
+    categories.forEach(({ title }) => {
+      expect(getByText(title)).toBeTruthy();
     });
 
-    expect(getByText('Ao molho')).toBeTruthy();
-
-    expect(queryByText('Veggie')).toBeFalsy();
-
-    await act(async () => {
-      fireEvent.press(getByTestId('category-2'));
+    orders.forEach(({ name }) => {
+      expect(getByText(name)).toBeTruthy();
     });
 
-    expect(queryByText('Ao molho')).toBeFalsy();
-    expect(getByText('Veggie')).toBeTruthy();
-
     await act(async () => {
-      fireEvent.press(getByTestId('category-2'));
+      fireEvent.press(getByTestId(`category-${orders[0].category}`));
     });
 
-    expect(getByText('Ao molho')).toBeTruthy();
-    expect(getByText('Veggie')).toBeTruthy();
+    expect(getByText(orders[0].name)).toBeTruthy();
+
+    expect(queryByText(orders[1].name)).toBeFalsy();
+
+    await act(async () => {
+      fireEvent.press(getByTestId(`category-${orders[1].category}`));
+    });
+
+    expect(queryByText(orders[0].name)).toBeFalsy();
+    expect(getByText(orders[1].name)).toBeTruthy();
+
+    await act(async () => {
+      fireEvent.press(getByTestId(`category-${orders[1].category}`));
+    });
+
+    orders.forEach(order => {
+      expect(getByText(order.name)).toBeTruthy();
+    });
   });
 
   it('should be able to list the food plates filtered by name search', async () => {
-    const items = [
-      {
-        id: 1,
-        name: 'Ao molho',
-        description:
-          'Macarrão ao molho branco, fughi e cheiro verde das montanhas.',
-        price: 19.9,
-        category: 1,
-        image_url:
-          'https://storage.googleapis.com/golden-wind/bootcamp-gostack/desafio-food/food1.png',
-        thumbnail_url:
-          'https://storage.googleapis.com/golden-wind/bootcamp-gostack/desafio-gorestaurant-mobile/ao_molho.png',
-        extras: [
-          {
-            id: 1,
-            name: 'Bacon',
-            value: 1.5,
-          },
-          {
-            id: 2,
-            name: 'Frango',
-            value: 2,
-          },
-        ],
-      },
-      {
-        id: 2,
-        name: 'Veggie',
-        description:
-          'Macarrão com pimentão, ervilha e ervas finas colhidas no himalaia.',
-        price: '21.90',
-        category: 2,
-        image_url:
-          'https://storage.googleapis.com/golden-wind/bootcamp-gostack/desafio-food/food2.png',
-        thumbnail_url:
-          'https://storage.googleapis.com/golden-wind/bootcamp-gostack/desafio-gorestaurant-mobile/veggie.png',
-        extras: [
-          {
-            id: 3,
-            name: 'Bacon',
-            value: 1.5,
-          },
-        ],
-      },
-    ];
-
-    const aoMolhoSearchResult = [
-      {
-        id: 1,
-        name: 'Ao molho',
-        description:
-          'Macarrão ao molho branco, fughi e cheiro verde das montanhas.',
-        price: 19.9,
-        category: 1,
-        image_url:
-          'https://storage.googleapis.com/golden-wind/bootcamp-gostack/desafio-food/food1.png',
-        thumbnail_url:
-          'https://storage.googleapis.com/golden-wind/bootcamp-gostack/desafio-gorestaurant-mobile/ao_molho.png',
-        extras: [
-          {
-            id: 1,
-            name: 'Bacon',
-            value: 1.5,
-          },
-          {
-            id: 2,
-            name: 'Frango',
-            value: 2,
-          },
-        ],
-      },
-    ];
-
-    const veggieSearchResult = [
-      {
-        id: 2,
-        name: 'Veggie',
-        description:
-          'Macarrão com pimentão, ervilha e ervas finas colhidas no himalaia.',
-        price: '21.90',
-        category: 2,
-        image_url:
-          'https://storage.googleapis.com/golden-wind/bootcamp-gostack/desafio-food/food2.png',
-        thumbnail_url:
-          'https://storage.googleapis.com/golden-wind/bootcamp-gostack/desafio-gorestaurant-mobile/veggie.png',
-        extras: [
-          {
-            id: 3,
-            name: 'Bacon',
-            value: 1.5,
-          },
-        ],
-      },
-    ];
-
-    const categories = [
-      {
-        id: 1,
-        title: 'Massas',
-        image_url:
-          'https://storage.googleapis.com/golden-wind/bootcamp-gostack/desafio-gorestaurant-mobile/massas.png',
-      },
-      {
-        id: 2,
-        title: 'Pizzas',
-        image_url:
-          'https://storage.googleapis.com/golden-wind/bootcamp-gostack/desafio-gorestaurant-mobile/pizzas.png',
-      },
-    ];
+    const categories = await factory.attrsMany<Category>('Category', 2);
+    const [category] = categories;
+    const orders = await factory.attrsMany<Order>('Order', 2);
 
     apiMock
       .onGet('/foods')
       .reply(config => {
-        switch (config.params.name_like) {
-          case 'Ao molho':
-            return [200, aoMolhoSearchResult];
-
-          case 'Veggie':
-            return [200, veggieSearchResult];
-
-          default:
-            return [200, items];
+        if (config.params.name_like) {
+          return [
+            200,
+            orders.filter(({ name }) => name === config.params.name_like),
+          ];
         }
+
+        return [200, orders];
       })
-      .onGet('/foods?name_like=Ao molho')
-      .reply(200, aoMolhoSearchResult)
-      .onGet('/foods?name_like=Veggie')
-      .reply(200, veggieSearchResult)
       .onGet('/categories')
       .reply(200, categories);
 
     const { getByText, queryByText, getByTestId } = render(<Dashboard />);
 
-    await wait(() => expect(getByText('Massas')).toBeTruthy(), {
+    await wait(() => expect(getByText(category.title)).toBeTruthy(), {
       timeout: 200,
     });
 
-    expect(getByText('Massas')).toBeTruthy();
-    expect(getByText('Pizzas')).toBeTruthy();
+    categories.forEach(({ title }) => {
+      expect(getByText(title)).toBeTruthy();
+    });
 
-    expect(getByText('Ao molho')).toBeTruthy();
-    expect(getByText('Veggie')).toBeTruthy();
+    orders.forEach(({ name }) => {
+      expect(getByText(name)).toBeTruthy();
+    });
 
     const inputSearch = getByTestId('search-input');
 
     await act(async () => {
-      fireEvent.changeText(inputSearch, 'Ao molho');
+      fireEvent.changeText(inputSearch, orders[0].name);
     });
 
-    expect(getByText('Ao molho')).toBeTruthy();
+    expect(getByText(orders[0].name)).toBeTruthy();
 
-    expect(queryByText('Veggie')).toBeFalsy();
+    expect(queryByText(orders[1].name)).toBeFalsy();
 
     await act(async () => {
-      fireEvent.changeText(inputSearch, 'Veggie');
+      fireEvent.changeText(inputSearch, orders[1].name);
     });
 
-    expect(queryByText('Ao molho')).toBeFalsy();
+    expect(queryByText(orders[0].name)).toBeFalsy();
 
-    expect(getByText('Veggie')).toBeTruthy();
+    expect(getByText(orders[1].name)).toBeTruthy();
 
     await act(async () => {
       fireEvent.changeText(inputSearch, '');
     });
 
-    expect(getByText('Ao molho')).toBeTruthy();
+    expect(getByText(orders[0].name)).toBeTruthy();
 
-    expect(queryByText('Veggie')).toBeTruthy();
+    expect(queryByText(orders[1].name)).toBeTruthy();
   });
 
   it('should be able to navigate to the food details page', async () => {
-    const items = [
-      {
-        id: 1,
-        name: 'Ao molho',
-        description:
-          'Macarrão ao molho branco, fughi e cheiro verde das montanhas.',
-        price: 19.9,
-        category: 1,
-        image_url:
-          'https://storage.googleapis.com/golden-wind/bootcamp-gostack/desafio-food/food1.png',
-        thumbnail_url:
-          'https://storage.googleapis.com/golden-wind/bootcamp-gostack/desafio-gorestaurant-mobile/ao_molho.png',
-        extras: [
-          {
-            id: 1,
-            name: 'Bacon',
-            value: 1.5,
-          },
-          {
-            id: 2,
-            name: 'Frango',
-            value: 2,
-          },
-        ],
-      },
-      {
-        id: 2,
-        name: 'Veggie',
-        description:
-          'Macarrão com pimentão, ervilha e ervas finas colhidas no himalaia.',
-        price: '21.90',
-        category: 2,
-        image_url:
-          'https://storage.googleapis.com/golden-wind/bootcamp-gostack/desafio-food/food2.png',
-        thumbnail_url:
-          'https://storage.googleapis.com/golden-wind/bootcamp-gostack/desafio-gorestaurant-mobile/veggie.png',
-        extras: [
-          {
-            id: 3,
-            name: 'Bacon',
-            value: 1.5,
-          },
-        ],
-      },
-    ];
+    const category = await factory.attrs<Category>('Category');
+    const order = await factory.attrs<Order>('Order');
 
     apiMock
       .onGet('/categories')
-      .reply(200, [
-        {
-          id: 1,
-          title: 'Massas',
-          image_url:
-            'https://storage.googleapis.com/golden-wind/bootcamp-gostack/desafio-gorestaurant-mobile/massas.png',
-        },
-      ])
+      .reply(200, [category])
       .onGet('/foods')
-      .reply(config => {
-        if (config.params.name_like === '') {
-          return [200, items];
-        }
-
-        return [200, items];
-      })
+      .reply(200, [order])
       .onGet('/foods?name_like=')
-      .reply(200, items);
+      .reply(200, [order]);
 
     const { getByText, getByTestId } = render(<Dashboard />);
 
-    await wait(() => expect(getByText('Ao molho')).toBeTruthy(), {
+    await wait(() => expect(getByText(order.name)).toBeTruthy(), {
       timeout: 200,
     });
 
     await act(async () => {
-      fireEvent.press(getByTestId('food-1'));
+      fireEvent.press(getByTestId(`food-${order.id}`));
     });
 
-    expect(getByTestId('food-1')).toBeTruthy();
+    expect(getByTestId(`food-${order.id}`)).toBeTruthy();
 
     expect(mockedNavigate).toHaveBeenCalledTimes(1);
 
     expect(mockedNavigate).toHaveBeenCalledWith('FoodDetails', {
-      id: 1,
+      id: order.id,
     });
   });
 });

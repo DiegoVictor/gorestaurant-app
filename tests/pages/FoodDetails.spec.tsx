@@ -1,3 +1,5 @@
+import 'intl';
+import 'intl/locale-data/jsonp/pt-BR';
 import React from 'react';
 import '@testing-library/jest-native';
 import { render, wait, act, fireEvent } from '@testing-library/react-native';
@@ -5,23 +7,31 @@ import AxiosMock from 'axios-mock-adapter';
 
 import api from '../../src/services/api';
 import FoodDetails from '../../src/pages/FoodDetails';
+import formatValue from '../../src/utils/formatValue';
+import factory from '../utils/factory';
+
+interface Order {
+  id: number;
+  name: string;
+  description: string;
+  price: number;
+  category: number;
+  image_url: string;
+  thumbnail_url: string;
+  extras: Extra[];
+}
+
+interface Extra {
+  id: number;
+  name: string;
+  value: number;
+}
 
 jest.mock('../../src/utils/formatValue.ts', () => ({
   __esModule: true,
   default: jest.fn().mockImplementation((value: number) => {
-    switch (value) {
-      case 19.9:
-        return 'R$ 19,90';
-      case 39.8:
-        return 'R$ 39,80';
-      case 22.9:
-        return 'R$ 22,90';
-      case 21.4:
-        return 'R$ 21,40';
-
-      default:
-        return '';
-    }
+    const [reals, cents] = value.toString().split('.');
+    return `R$ ${reals},${`${cents}00`.slice(0, 2)}`;
   }),
 }));
 
@@ -50,101 +60,51 @@ describe('FoodDetails', () => {
   });
 
   it('should be able to list the food', async () => {
-    const item = {
-      id: 1,
-      name: 'Ao molho',
-      description:
-        'Macarrão ao molho branco, fughi e cheiro verde das montanhas.',
-      price: 19.9,
-      category: 1,
-      image_url:
-        'https://storage.googleapis.com/golden-wind/bootcamp-gostack/desafio-food/food1.png',
-      thumbnail_url:
-        'https://storage.googleapis.com/golden-wind/bootcamp-gostack/desafio-gorestaurant-mobile/ao_molho.png',
-      extras: [
-        {
-          id: 1,
-          name: 'Bacon',
-          value: 1.5,
-        },
-        {
-          id: 2,
-          name: 'Frango',
-          value: 2,
-        },
-      ],
-    };
+    const order = await factory.attrs<Order>('Order');
 
     apiMock
       .onGet('/foods/1')
-      .reply(200, item)
+      .reply(200, order)
       .onGet('/favorites/1')
-      .reply(200, item);
+      .reply(200, order);
 
     const { getByText, getByTestId } = render(<FoodDetails />);
 
-    await wait(() => expect(getByText('Ao molho')).toBeTruthy(), {
+    await wait(() => expect(getByText(order.name)).toBeTruthy(), {
       timeout: 200,
     });
 
-    expect(getByText('Ao molho')).toBeTruthy();
-    expect(
-      getByText(
-        'Macarrão ao molho branco, fughi e cheiro verde das montanhas.',
-      ),
-    ).toBeTruthy();
+    expect(getByText(order.name)).toBeTruthy();
+    expect(getByText(order.description)).toBeTruthy();
 
-    expect(getByText('Bacon')).toBeTruthy();
-    expect(getByText('Frango')).toBeTruthy();
+    order.extras.forEach(({ name }) => {
+      expect(getByText(name)).toBeTruthy();
+    });
 
     expect(getByTestId('food-quantity')).toHaveTextContent('1');
 
-    expect(getByTestId('cart-total')).toHaveTextContent('R$ 19,90');
+    expect(getByTestId('cart-total')).toHaveTextContent(
+      formatValue(order.price),
+    );
   });
 
   it('should be able to increment food quantity', async () => {
-    const item = {
-      id: 1,
-      name: 'Ao molho',
-      description:
-        'Macarrão ao molho branco, fughi e cheiro verde das montanhas.',
-      price: 19.9,
-      category: 1,
-      image_url:
-        'https://storage.googleapis.com/golden-wind/bootcamp-gostack/desafio-food/food1.png',
-      thumbnail_url:
-        'https://storage.googleapis.com/golden-wind/bootcamp-gostack/desafio-gorestaurant-mobile/ao_molho.png',
-      extras: [
-        {
-          id: 1,
-          name: 'Bacon',
-          value: 1.5,
-        },
-        {
-          id: 2,
-          name: 'Frango',
-          value: 2,
-        },
-      ],
-    };
+    const order = await factory.attrs<Order>('Order');
 
-    apiMock.onGet('/foods/1').reply(200, item);
+    apiMock.onGet('/foods/1').reply(200, order);
 
     const { getByText, getByTestId } = render(<FoodDetails />);
 
-    await wait(() => expect(getByText('Ao molho')).toBeTruthy(), {
+    await wait(() => expect(getByText(order.name)).toBeTruthy(), {
       timeout: 200,
     });
 
-    expect(getByText('Ao molho')).toBeTruthy();
-    expect(
-      getByText(
-        'Macarrão ao molho branco, fughi e cheiro verde das montanhas.',
-      ),
-    ).toBeTruthy();
+    expect(getByText(order.name)).toBeTruthy();
+    expect(getByText(order.description)).toBeTruthy();
 
-    expect(getByText('Bacon')).toBeTruthy();
-    expect(getByText('Frango')).toBeTruthy();
+    order.extras.forEach(({ name }) => {
+      expect(getByText(name)).toBeTruthy();
+    });
 
     expect(getByTestId('food-quantity')).toHaveTextContent('1');
 
@@ -154,52 +114,28 @@ describe('FoodDetails', () => {
 
     expect(getByTestId('food-quantity')).toHaveTextContent('2');
 
-    expect(getByTestId('cart-total')).toHaveTextContent('R$ 39,80');
+    expect(getByTestId('cart-total')).toHaveTextContent(
+      formatValue(order.price * 2),
+    );
   });
 
   it('should be able to decrement food quantity', async () => {
-    const item = {
-      id: 1,
-      name: 'Ao molho',
-      description:
-        'Macarrão ao molho branco, fughi e cheiro verde das montanhas.',
-      price: 19.9,
-      category: 1,
-      image_url:
-        'https://storage.googleapis.com/golden-wind/bootcamp-gostack/desafio-food/food1.png',
-      thumbnail_url:
-        'https://storage.googleapis.com/golden-wind/bootcamp-gostack/desafio-gorestaurant-mobile/ao_molho.png',
-      extras: [
-        {
-          id: 1,
-          name: 'Bacon',
-          value: 1.5,
-        },
-        {
-          id: 2,
-          name: 'Frango',
-          value: 2,
-        },
-      ],
-    };
+    const order = await factory.attrs<Order>('Order');
 
-    apiMock.onGet('/foods/1').reply(200, item);
+    apiMock.onGet('/foods/1').reply(200, order);
 
     const { getByText, getByTestId } = render(<FoodDetails />);
 
-    await wait(() => expect(getByText('Ao molho')).toBeTruthy(), {
+    await wait(() => expect(getByText(order.name)).toBeTruthy(), {
       timeout: 200,
     });
 
-    expect(getByText('Ao molho')).toBeTruthy();
-    expect(
-      getByText(
-        'Macarrão ao molho branco, fughi e cheiro verde das montanhas.',
-      ),
-    ).toBeTruthy();
+    expect(getByText(order.name)).toBeTruthy();
+    expect(getByText(order.description)).toBeTruthy();
 
-    expect(getByText('Bacon')).toBeTruthy();
-    expect(getByText('Frango')).toBeTruthy();
+    order.extras.forEach(({ name }) => {
+      expect(getByText(name)).toBeTruthy();
+    });
 
     expect(getByTestId('food-quantity')).toHaveTextContent('1');
 
@@ -227,52 +163,28 @@ describe('FoodDetails', () => {
 
     expect(getByTestId('food-quantity')).toHaveTextContent('1');
 
-    expect(getByTestId('cart-total')).toHaveTextContent('R$ 19,90');
+    expect(getByTestId('cart-total')).toHaveTextContent(
+      formatValue(order.price),
+    );
   });
 
   it('should not be able to decrement food quantity below than 1', async () => {
-    const item = {
-      id: 1,
-      name: 'Ao molho',
-      description:
-        'Macarrão ao molho branco, fughi e cheiro verde das montanhas.',
-      price: 19.9,
-      category: 1,
-      image_url:
-        'https://storage.googleapis.com/golden-wind/bootcamp-gostack/desafio-food/food1.png',
-      thumbnail_url:
-        'https://storage.googleapis.com/golden-wind/bootcamp-gostack/desafio-gorestaurant-mobile/ao_molho.png',
-      extras: [
-        {
-          id: 1,
-          name: 'Bacon',
-          value: 1.5,
-        },
-        {
-          id: 2,
-          name: 'Frango',
-          value: 2,
-        },
-      ],
-    };
+    const order = await factory.attrs<Order>('Order');
 
-    apiMock.onGet('/foods/1').reply(200, item);
+    apiMock.onGet('/foods/1').reply(200, order);
 
     const { getByText, getByTestId } = render(<FoodDetails />);
 
-    await wait(() => expect(getByText('Ao molho')).toBeTruthy(), {
+    await wait(() => expect(getByText(order.name)).toBeTruthy(), {
       timeout: 200,
     });
 
-    expect(getByText('Ao molho')).toBeTruthy();
-    expect(
-      getByText(
-        'Macarrão ao molho branco, fughi e cheiro verde das montanhas.',
-      ),
-    ).toBeTruthy();
+    expect(getByText(order.name)).toBeTruthy();
+    expect(getByText(order.description)).toBeTruthy();
 
-    expect(getByText('Bacon')).toBeTruthy();
-    expect(getByText('Frango')).toBeTruthy();
+    order.extras.forEach(({ name }) => {
+      expect(getByText(name)).toBeTruthy();
+    });
 
     expect(getByTestId('food-quantity')).toHaveTextContent('1');
 
@@ -296,225 +208,143 @@ describe('FoodDetails', () => {
   });
 
   it('should be able to increment an extra item quantity', async () => {
-    const item = {
-      id: 1,
-      name: 'Ao molho',
-      description:
-        'Macarrão ao molho branco, fughi e cheiro verde das montanhas.',
-      price: 19.9,
-      category: 1,
-      image_url:
-        'https://storage.googleapis.com/golden-wind/bootcamp-gostack/desafio-food/food1.png',
-      thumbnail_url:
-        'https://storage.googleapis.com/golden-wind/bootcamp-gostack/desafio-gorestaurant-mobile/ao_molho.png',
-      extras: [
-        {
-          id: 1,
-          name: 'Bacon',
-          value: 1.5,
-        },
-        {
-          id: 2,
-          name: 'Frango',
-          value: 2,
-        },
-      ],
-    };
+    const order = await factory.attrs<Order>('Order');
+    const [extra] = order.extras;
 
-    apiMock.onGet('/foods/1').reply(200, item);
+    apiMock.onGet('/foods/1').reply(200, order);
 
     const { getByText, getByTestId } = render(<FoodDetails />);
 
-    await wait(() => expect(getByText('Ao molho')).toBeTruthy(), {
+    await wait(() => expect(getByText(order.name)).toBeTruthy(), {
       timeout: 200,
     });
 
-    expect(getByText('Ao molho')).toBeTruthy();
-    expect(
-      getByText(
-        'Macarrão ao molho branco, fughi e cheiro verde das montanhas.',
-      ),
-    ).toBeTruthy();
+    expect(getByText(order.name)).toBeTruthy();
+    expect(getByText(order.description)).toBeTruthy();
 
-    expect(getByText('Bacon')).toBeTruthy();
-    expect(getByText('Frango')).toBeTruthy();
-
-    expect(getByTestId('extra-quantity-1')).toHaveTextContent('0');
-
-    await act(async () => {
-      fireEvent.press(getByTestId('increment-extra-1'));
+    order.extras.forEach(({ name }) => {
+      expect(getByText(name)).toBeTruthy();
     });
 
-    expect(getByTestId('extra-quantity-1')).toHaveTextContent('1');
+    expect(getByTestId(`extra-quantity-${extra.id}`)).toHaveTextContent('0');
 
     await act(async () => {
-      fireEvent.press(getByTestId('increment-extra-1'));
+      fireEvent.press(getByTestId(`increment-extra-${extra.id}`));
     });
 
-    expect(getByTestId('extra-quantity-1')).toHaveTextContent('2');
+    expect(getByTestId(`extra-quantity-${extra.id}`)).toHaveTextContent('1');
 
-    expect(getByTestId('cart-total')).toHaveTextContent('R$ 22,90');
+    await act(async () => {
+      fireEvent.press(getByTestId(`increment-extra-${extra.id}`));
+    });
+
+    expect(getByTestId(`extra-quantity-${extra.id}`)).toHaveTextContent('2');
+
+    expect(getByTestId('cart-total')).toHaveTextContent(
+      formatValue(order.price + extra.value * 2),
+    );
   });
 
   it('should be able to decrement an extra item quantity', async () => {
-    const item = {
-      id: 1,
-      name: 'Ao molho',
-      description:
-        'Macarrão ao molho branco, fughi e cheiro verde das montanhas.',
-      price: 19.9,
-      category: 1,
-      image_url:
-        'https://storage.googleapis.com/golden-wind/bootcamp-gostack/desafio-food/food1.png',
-      thumbnail_url:
-        'https://storage.googleapis.com/golden-wind/bootcamp-gostack/desafio-gorestaurant-mobile/ao_molho.png',
-      extras: [
-        {
-          id: 1,
-          name: 'Bacon',
-          value: 1.5,
-        },
-      ],
-    };
+    const order = await factory.attrs<Order>('Order');
+    const [extra] = order.extras;
 
-    apiMock.onGet('/foods/1').reply(200, item);
+    apiMock.onGet('/foods/1').reply(200, order);
 
     const { getByText, getByTestId } = render(<FoodDetails />);
 
-    await wait(() => expect(getByText('Ao molho')).toBeTruthy(), {
+    await wait(() => expect(getByText(order.name)).toBeTruthy(), {
       timeout: 200,
     });
 
-    expect(getByText('Ao molho')).toBeTruthy();
-    expect(
-      getByText(
-        'Macarrão ao molho branco, fughi e cheiro verde das montanhas.',
-      ),
-    ).toBeTruthy();
+    expect(getByText(order.name)).toBeTruthy();
+    expect(getByText(order.description)).toBeTruthy();
 
-    expect(getByText('Bacon')).toBeTruthy();
+    expect(getByText(extra.name)).toBeTruthy();
 
-    expect(getByTestId('extra-quantity-1')).toHaveTextContent('0');
+    expect(getByTestId(`extra-quantity-${extra.id}`)).toHaveTextContent('0');
 
     await act(async () => {
-      fireEvent.press(getByTestId('increment-extra-1'));
+      fireEvent.press(getByTestId(`increment-extra-${extra.id}`));
     });
 
-    expect(getByTestId('extra-quantity-1')).toHaveTextContent('1');
+    expect(getByTestId(`extra-quantity-${extra.id}`)).toHaveTextContent('1');
 
     await act(async () => {
-      fireEvent.press(getByTestId('increment-extra-1'));
+      fireEvent.press(getByTestId(`increment-extra-${extra.id}`));
     });
 
-    expect(getByTestId('extra-quantity-1')).toHaveTextContent('2');
+    expect(getByTestId(`extra-quantity-${extra.id}`)).toHaveTextContent('2');
 
     await act(async () => {
-      fireEvent.press(getByTestId('decrement-extra-1'));
+      fireEvent.press(getByTestId(`decrement-extra-${extra.id}`));
     });
 
-    expect(getByTestId('extra-quantity-1')).toHaveTextContent('1');
+    expect(getByTestId(`extra-quantity-${extra.id}`)).toHaveTextContent('1');
 
-    expect(getByTestId('cart-total')).toHaveTextContent('R$ 21,40');
+    expect(getByTestId('cart-total')).toHaveTextContent(
+      formatValue(order.price + extra.value),
+    );
   });
 
   it('should not be able to decrement an extra item quantity below than 0', async () => {
-    const item = {
-      id: 1,
-      name: 'Ao molho',
-      description:
-        'Macarrão ao molho branco, fughi e cheiro verde das montanhas.',
-      price: 19.9,
-      category: 1,
-      image_url:
-        'https://storage.googleapis.com/golden-wind/bootcamp-gostack/desafio-food/food1.png',
-      thumbnail_url:
-        'https://storage.googleapis.com/golden-wind/bootcamp-gostack/desafio-gorestaurant-mobile/ao_molho.png',
-      extras: [
-        {
-          id: 1,
-          name: 'Bacon',
-          value: 1.5,
-        },
-      ],
-    };
+    const order = await factory.attrs<Order>('Order');
+    const [extra] = order.extras;
 
-    apiMock.onGet('/foods/1').reply(200, item);
+    apiMock.onGet('/foods/1').reply(200, order);
 
     const { getByText, getByTestId } = render(<FoodDetails />);
 
-    await wait(() => expect(getByText('Ao molho')).toBeTruthy(), {
+    await wait(() => expect(getByText(order.name)).toBeTruthy(), {
       timeout: 200,
     });
 
-    expect(getByText('Ao molho')).toBeTruthy();
-    expect(
-      getByText(
-        'Macarrão ao molho branco, fughi e cheiro verde das montanhas.',
-      ),
-    ).toBeTruthy();
+    expect(getByText(order.name)).toBeTruthy();
+    expect(getByText(order.description)).toBeTruthy();
 
-    expect(getByText('Bacon')).toBeTruthy();
-
-    expect(getByTestId('extra-quantity-1')).toHaveTextContent('0');
-
-    await act(async () => {
-      fireEvent.press(getByTestId('decrement-extra-1'));
+    order.extras.forEach(({ name }) => {
+      expect(getByText(name)).toBeTruthy();
     });
 
-    expect(getByTestId('extra-quantity-1')).toHaveTextContent('0');
+    expect(getByTestId(`extra-quantity-${extra.id}`)).toHaveTextContent('0');
 
-    expect(getByTestId('cart-total')).toHaveTextContent('R$ 19,90');
+    await act(async () => {
+      fireEvent.press(getByTestId(`decrement-extra-${extra.id}`));
+    });
+
+    expect(getByTestId(`extra-quantity-${extra.id}`)).toHaveTextContent('0');
+
+    expect(getByTestId('cart-total')).toHaveTextContent(
+      formatValue(order.price),
+    );
   });
 
   it('should be able to finish the order', async () => {
-    const item = {
-      id: 1,
-      name: 'Ao molho',
-      description:
-        'Macarrão ao molho branco, fughi e cheiro verde das montanhas.',
-      price: 19.9,
-      category: 1,
-      image_url:
-        'https://storage.googleapis.com/golden-wind/bootcamp-gostack/desafio-food/food1.png',
-      thumbnail_url:
-        'https://storage.googleapis.com/golden-wind/bootcamp-gostack/desafio-gorestaurant-mobile/ao_molho.png',
-      extras: [
-        {
-          id: 1,
-          name: 'Bacon',
-          value: 1.5,
-        },
-        {
-          id: 2,
-          name: 'Frango',
-          value: 2,
-        },
-      ],
-    };
+    const order = await factory.attrs<Order>('Order');
 
     apiMock
-      .onGet('/foods/1')
-      .reply(200, item)
+      .onGet(`/foods/1`)
+      .reply(200, order)
       .onPost('orders')
-      .reply(200, item);
+      .reply(200, order);
 
     const { getByText, getByTestId } = render(<FoodDetails />);
 
-    await wait(() => expect(getByText('Ao molho')).toBeTruthy(), {
+    await wait(() => expect(getByText(order.name)).toBeTruthy(), {
       timeout: 200,
     });
 
-    expect(getByText('Ao molho')).toBeTruthy();
-    expect(
-      getByText(
-        'Macarrão ao molho branco, fughi e cheiro verde das montanhas.',
-      ),
-    ).toBeTruthy();
+    expect(getByText(order.name)).toBeTruthy();
+    expect(getByText(order.description)).toBeTruthy();
 
-    expect(getByText('Bacon')).toBeTruthy();
-    expect(getByText('Frango')).toBeTruthy();
+    order.extras.forEach(extra => {
+      expect(getByText(extra.name)).toBeTruthy();
+    });
+
     expect(getByTestId('food-quantity')).toHaveTextContent('1');
-    expect(getByTestId('cart-total')).toHaveTextContent('R$ 19,90');
+    expect(getByTestId('cart-total')).toHaveTextContent(
+      formatValue(order.price),
+    );
 
     await act(async () => {
       fireEvent.press(getByTestId('finish'));
