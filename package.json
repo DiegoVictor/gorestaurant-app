@@ -15,7 +15,7 @@
     "@react-navigation/bottom-tabs": "^5.5.2",
     "@react-navigation/native": "^5.5.1",
     "@react-navigation/stack": "^5.5.1",
-    "axios": "^0.19.2",
+    "axios": "^0.21.1",
     "babel-plugin-dotenv-import": "^2.1.0",
     "intl": "^1.2.5",
     "react": "16.11.0",
