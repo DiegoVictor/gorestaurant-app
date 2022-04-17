@@ -9,9 +9,7 @@ interface IconProps {
 }
 
 jest.mock('react-native-vector-icons/Feather', () => {
-  // eslint-disable-next-line global-require, @typescript-eslint/no-var-requires
   const styled = require('styled-components/native');
-
   const Icon = styled.default.Text<IconProps>`
     color: ${({ color }) => color || '#b7b7cc'};
   `;
@@ -35,7 +33,7 @@ describe('SearchInput', () => {
 
     expect(container).toHaveStyle({ borderColor: '#f0f0f5' });
 
-    fireEvent.focus(inputSearch);
+    fireEvent(inputSearch, 'onFocus');
 
     expect(container).toHaveStyle({ borderColor: '#c72828' });
   });
@@ -55,7 +53,7 @@ describe('SearchInput', () => {
 
     expect(icon).toHaveStyle({ color: '#b7b7cc' });
 
-    fireEvent.blur(inputSearch);
+    fireEvent(inputSearch, 'onBlur');
 
     expect(icon).toHaveStyle({ color: '#c72828' });
   });
