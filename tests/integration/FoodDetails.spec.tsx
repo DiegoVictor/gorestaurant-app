@@ -2,7 +2,7 @@ import 'intl';
 import 'intl/locale-data/jsonp/pt-BR';
 import React from 'react';
 import '@testing-library/jest-native';
-import { render, wait, act, fireEvent } from '@testing-library/react-native';
+import { render, waitFor, act, fireEvent } from '@testing-library/react-native';
 import AxiosMock from 'axios-mock-adapter';
 
 import api from '../../src/services/api';
@@ -30,7 +30,7 @@ interface Extra {
 jest.mock('../../src/utils/formatValue.ts', () => ({
   __esModule: true,
   default: jest.fn().mockImplementation((value: number) => {
-    const [reals, cents] = value.toString().split('.');
+    const [reals, cents = '00'] = value.toString().split('.');
     return `R$ ${reals},${`${cents}00`.slice(0, 2)}`;
   }),
 }));
@@ -38,8 +38,9 @@ jest.mock('../../src/utils/formatValue.ts', () => ({
 const mockedNavigate = jest.fn();
 
 jest.mock('@react-navigation/native', () => {
+  const current = jest.requireActual('@react-navigation/native');
   return {
-    ...jest.requireActual('@react-navigation/native'),
+    ...current,
     useNavigation: () => ({
       navigate: mockedNavigate,
       setOptions: jest.fn(),
@@ -70,9 +71,7 @@ describe('FoodDetails', () => {
 
     const { getByText, getByTestId } = render(<FoodDetails />);
 
-    await wait(() => expect(getByText(order.name)).toBeTruthy(), {
-      timeout: 200,
-    });
+    await waitFor(() => expect(getByText(order.name)).toBeTruthy());
 
     expect(getByText(order.name)).toBeTruthy();
     expect(getByText(order.description)).toBeTruthy();
@@ -95,9 +94,7 @@ describe('FoodDetails', () => {
 
     const { getByText, getByTestId } = render(<FoodDetails />);
 
-    await wait(() => expect(getByText(order.name)).toBeTruthy(), {
-      timeout: 200,
-    });
+    await waitFor(() => expect(getByText(order.name)).toBeTruthy());
 
     expect(getByText(order.name)).toBeTruthy();
     expect(getByText(order.description)).toBeTruthy();
@@ -126,9 +123,7 @@ describe('FoodDetails', () => {
 
     const { getByText, getByTestId } = render(<FoodDetails />);
 
-    await wait(() => expect(getByText(order.name)).toBeTruthy(), {
-      timeout: 200,
-    });
+    await waitFor(() => expect(getByText(order.name)).toBeTruthy());
 
     expect(getByText(order.name)).toBeTruthy();
     expect(getByText(order.description)).toBeTruthy();
@@ -175,9 +170,7 @@ describe('FoodDetails', () => {
 
     const { getByText, getByTestId } = render(<FoodDetails />);
 
-    await wait(() => expect(getByText(order.name)).toBeTruthy(), {
-      timeout: 200,
-    });
+    await waitFor(() => expect(getByText(order.name)).toBeTruthy());
 
     expect(getByText(order.name)).toBeTruthy();
     expect(getByText(order.description)).toBeTruthy();
@@ -215,9 +208,7 @@ describe('FoodDetails', () => {
 
     const { getByText, getByTestId } = render(<FoodDetails />);
 
-    await wait(() => expect(getByText(order.name)).toBeTruthy(), {
-      timeout: 200,
-    });
+    await waitFor(() => expect(getByText(order.name)).toBeTruthy());
 
     expect(getByText(order.name)).toBeTruthy();
     expect(getByText(order.description)).toBeTruthy();
@@ -240,9 +231,9 @@ describe('FoodDetails', () => {
 
     expect(getByTestId(`extra-quantity-${extra.id}`)).toHaveTextContent('2');
 
-    expect(getByTestId('cart-total')).toHaveTextContent(
-      formatValue(order.price + extra.value * 2),
-    );
+    const sum = Number(order.price) + Number(extra.value) * 2;
+
+    expect(getByTestId('cart-total')).toHaveTextContent(formatValue(sum));
   });
 
   it('should be able to decrement an extra item quantity', async () => {
@@ -253,9 +244,7 @@ describe('FoodDetails', () => {
 
     const { getByText, getByTestId } = render(<FoodDetails />);
 
-    await wait(() => expect(getByText(order.name)).toBeTruthy(), {
-      timeout: 200,
-    });
+    await waitFor(() => expect(getByText(order.name)).toBeTruthy());
 
     expect(getByText(order.name)).toBeTruthy();
     expect(getByText(order.description)).toBeTruthy();
@@ -283,7 +272,7 @@ describe('FoodDetails', () => {
     expect(getByTestId(`extra-quantity-${extra.id}`)).toHaveTextContent('1');
 
     expect(getByTestId('cart-total')).toHaveTextContent(
-      formatValue(order.price + extra.value),
+      formatValue(Number(order.price) + Number(extra.value)),
     );
   });
 
@@ -295,9 +284,7 @@ describe('FoodDetails', () => {
 
     const { getByText, getByTestId } = render(<FoodDetails />);
 
-    await wait(() => expect(getByText(order.name)).toBeTruthy(), {
-      timeout: 200,
-    });
+    await waitFor(() => expect(getByText(order.name)).toBeTruthy());
 
     expect(getByText(order.name)).toBeTruthy();
     expect(getByText(order.description)).toBeTruthy();
@@ -330,9 +317,7 @@ describe('FoodDetails', () => {
 
     const { getByText, getByTestId } = render(<FoodDetails />);
 
-    await wait(() => expect(getByText(order.name)).toBeTruthy(), {
-      timeout: 200,
-    });
+    await waitFor(() => expect(getByText(order.name)).toBeTruthy());
 
     expect(getByText(order.name)).toBeTruthy();
     expect(getByText(order.description)).toBeTruthy();

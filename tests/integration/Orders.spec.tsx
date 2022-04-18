@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, wait } from '@testing-library/react-native';
+import { render, waitFor } from '@testing-library/react-native';
 import AxiosMock from 'axios-mock-adapter';
 
 import api from '../../src/services/api';
@@ -26,8 +26,9 @@ interface Order {
 const mockedNavigate = jest.fn();
 
 jest.mock('@react-navigation/native', () => {
+  const current = jest.requireActual('@react-navigation/native');
   return {
-    ...jest.requireActual('@react-navigation/native'),
+    ...current,
     useNavigation: () => ({
       navigate: mockedNavigate,
     }),
@@ -44,9 +45,7 @@ describe('Orders', () => {
 
     const { getByText } = render(<Orders />);
 
-    await wait(() => expect(getByText(orders[0].name)).toBeTruthy(), {
-      timeout: 200,
-    });
+    await waitFor(() => expect(getByText(orders[0].name)).toBeTruthy());
 
     orders.forEach(order => {
       expect(getByText(order.name)).toBeTruthy();

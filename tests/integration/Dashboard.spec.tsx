@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, fireEvent, act, wait } from '@testing-library/react-native';
+import { render, act, fireEvent, waitFor } from '@testing-library/react-native';
 import AxiosMock from 'axios-mock-adapter';
 
 import api from '../../src/services/api';
@@ -32,8 +32,9 @@ interface Category {
 const mockedNavigate = jest.fn();
 
 jest.mock('@react-navigation/native', () => {
+  const current = jest.requireActual('@react-navigation/native');
   return {
-    ...jest.requireActual('@react-navigation/native'),
+    ...current,
     useNavigation: () => ({
       navigate: mockedNavigate,
     }),
@@ -69,11 +70,11 @@ describe('Dashboard', () => {
       .onGet('/foods')
       .reply(200, [order]);
 
-    const { getByText } = render(<Dashboard />);
+    const { getByTestId, getByText } = await waitFor(() =>
+      render(<Dashboard />),
+    );
 
-    await wait(() => expect(getByText(order.name)).toBeTruthy(), {
-      timeout: 200,
-    });
+    await waitFor(() => getByTestId(`food-${order.id}`));
 
     expect(getByText(order.name)).toBeTruthy();
     expect(getByText(order.description)).toBeTruthy();
@@ -106,9 +107,7 @@ describe('Dashboard', () => {
 
     const { getByText, queryByText, getByTestId } = render(<Dashboard />);
 
-    await wait(() => expect(getByText(category.title)).toBeTruthy(), {
-      timeout: 200,
-    });
+    await waitFor(() => expect(getByText(category.title)).toBeTruthy());
 
     categories.forEach(({ title }) => {
       expect(getByText(title)).toBeTruthy();
@@ -164,9 +163,7 @@ describe('Dashboard', () => {
 
     const { getByText, queryByText, getByTestId } = render(<Dashboard />);
 
-    await wait(() => expect(getByText(category.title)).toBeTruthy(), {
-      timeout: 200,
-    });
+    await waitFor(() => expect(getByText(category.title)).toBeTruthy());
 
     categories.forEach(({ title }) => {
       expect(getByText(title)).toBeTruthy();
@@ -215,20 +212,18 @@ describe('Dashboard', () => {
       .onGet('/foods?name_like=')
       .reply(200, [order]);
 
-    const { getByText, getByTestId } = render(<Dashboard />);
+    const { getByText, getByTestId } = await waitFor(() =>
+      render(<Dashboard />),
+    );
 
-    await wait(() => expect(getByText(order.name)).toBeTruthy(), {
-      timeout: 200,
-    });
+    await waitFor(() => expect(getByText(order.name)).toBeTruthy());
 
     await act(async () => {
       fireEvent.press(getByTestId(`food-${order.id}`));
     });
 
     expect(getByTestId(`food-${order.id}`)).toBeTruthy();
-
     expect(mockedNavigate).toHaveBeenCalledTimes(1);
-
     expect(mockedNavigate).toHaveBeenCalledWith('FoodDetails', {
       id: order.id,
     });
