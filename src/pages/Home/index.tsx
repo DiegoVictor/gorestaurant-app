@@ -6,12 +6,14 @@ import Icon from 'react-native-vector-icons/Feather';
 import Background from '../../assets/home-background.png';
 import Logo from '../../assets/logo.png';
 import {
-  Container,
+  Header,
   BackgroundImage,
   Title,
   NavigationButton,
   ButtonText,
   IconContainer,
+  Container,
+  Content,
 } from './styles';
 
 const Home: React.FC = () => {
@@ -24,24 +26,27 @@ const Home: React.FC = () => {
   }
 
   return (
-    <BackgroundImage
-      source={Background}
-      imageStyle={{
-        width: 313,
-        height: 427,
-      }}
-    >
-      <Container>
-        <Image source={Logo} />
-        <Title>Uma verdadeira experiência Italiana.</Title>
-      </Container>
-      <NavigationButton onPress={() => handleNavigate()}>
-        <ButtonText>Entrar no Restaurante</ButtonText>
-        <IconContainer>
-          <Icon name="log-in" size={24} color="#7A1818" />
-        </IconContainer>
-      </NavigationButton>
-    </BackgroundImage>
+    <Container>
+      <BackgroundImage
+        source={Background}
+        imageStyle={{
+          width: 313,
+          height: 427,
+        }}
+      />
+      <Content>
+        <Header>
+          <Image source={Logo} />
+          <Title>Uma verdadeira experiência Italiana.</Title>
+        </Header>
+        <NavigationButton onPress={() => handleNavigate()}>
+          <ButtonText>Entrar no Restaurante</ButtonText>
+          <IconContainer>
+            <Icon name="log-in" size={24} color="#7A1818" />
+          </IconContainer>
+        </NavigationButton>
+      </Content>
+    </Container>
   );
 };
 
