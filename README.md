@@ -7,7 +7,7 @@
 [![airbnb-style](https://flat.badgen.net/badge/style-guide/airbnb/ff5a5f?icon=airbnb)](https://github.com/airbnb/javascript)
 [![jest](https://img.shields.io/badge/jest-24.9.0-brightgreen?style=flat-square&logo=jest)](https://jestjs.io/)
 [![coverage](https://img.shields.io/codecov/c/gh/DiegoVictor/gorestaurant-app?logo=codecov&style=flat-square)](https://codecov.io/gh/DiegoVictor/gorestaurant-app)
-[![MIT License](https://img.shields.io/badge/license-MIT-green?style=flat-square)](https://github.com/DiegoVictor/gorestaurant-app/blob/master/LICENSE)
+[![MIT License](https://img.shields.io/badge/license-MIT-green?style=flat-square)](https://github.com/DiegoVictor/gorestaurant-app/blob/main/LICENSE)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](http://makeapullrequest.com)<br>
 This application allow you to make food orders, favorite plates and see your older orders. All the resources used by this application comes from a fake [`API`](#api).
 
@@ -24,12 +24,12 @@ This application allow you to make food orders, favorite plates and see your old
 
 # Screenshots
 Click to expand.<br>
-<img src="https://raw.githubusercontent.com/DiegoVictor/gorestaurant-app/master/screenshots/home.jpg" width="32%" />
-<img src="https://raw.githubusercontent.com/DiegoVictor/gorestaurant-app/master/screenshots/dashboard.jpg" width="32%" />
-<img src="https://raw.githubusercontent.com/DiegoVictor/gorestaurant-app/master/screenshots/filtered.jpg" width="32%" />
-<img src="https://raw.githubusercontent.com/DiegoVictor/gorestaurant-app/master/screenshots/order.jpg" width="32%" />
-<img src="https://raw.githubusercontent.com/DiegoVictor/gorestaurant-app/master/screenshots/orders.jpg" width="32%" />
-<img src="https://raw.githubusercontent.com/DiegoVictor/gorestaurant-app/master/screenshots/favorites.jpg" width="32%" />
+<img src="https://raw.githubusercontent.com/DiegoVictor/gorestaurant-app/main/screenshots/home.jpg" width="32%" />
+<img src="https://raw.githubusercontent.com/DiegoVictor/gorestaurant-app/main/screenshots/dashboard.jpg" width="32%" />
+<img src="https://raw.githubusercontent.com/DiegoVictor/gorestaurant-app/main/screenshots/filtered.jpg" width="32%" />
+<img src="https://raw.githubusercontent.com/DiegoVictor/gorestaurant-app/main/screenshots/order.jpg" width="32%" />
+<img src="https://raw.githubusercontent.com/DiegoVictor/gorestaurant-app/main/screenshots/orders.jpg" width="32%" />
+<img src="https://raw.githubusercontent.com/DiegoVictor/gorestaurant-app/main/screenshots/favorites.jpg" width="32%" />
 
 # Installing
 Easy peasy lemon squeezy:
