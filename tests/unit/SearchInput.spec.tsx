@@ -1,6 +1,5 @@
 import React from 'react';
 import { render, fireEvent } from '@testing-library/react-native';
-import 'jest-styled-components/native';
 
 import SearchInput from '../../src/components/SearchInput';
 

@@ -1,7 +1,6 @@
 import 'intl';
 import 'intl/locale-data/jsonp/pt-BR';
 import React from 'react';
-import '@testing-library/jest-native';
 import { render, waitFor, act, fireEvent } from '@testing-library/react-native';
 import AxiosMock from 'axios-mock-adapter';
 
