@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useMemo } from 'react';
 import { Image } from 'react-native';
-import Icon from 'react-native-vector-icons/Feather';
+import { Feather } from '@react-native-vector-icons/feather';
 import { useNavigation, useRoute } from '@react-navigation/native';
 
 import formatValue from '../../utils/formatValue';
@@ -149,7 +149,7 @@ const FoodDetails: React.FC = () => {
             <AdittionalItem key={extra.id}>
               <AdittionalItemText>{extra.name}</AdittionalItemText>
               <AdittionalQuantity>
-                <Icon
+                <Feather
                   size={15}
                   color="#6C6C80"
                   name="minus"
@@ -159,7 +159,7 @@ const FoodDetails: React.FC = () => {
                 <AdittionalItemText testID={`extra-quantity-${extra.id}`}>
                   {extra.quantity}
                 </AdittionalItemText>
-                <Icon
+                <Feather
                   size={15}
                   color="#6C6C80"
                   name="plus"
@@ -175,7 +175,7 @@ const FoodDetails: React.FC = () => {
           <PriceButtonContainer>
             <TotalPrice testID="cart-total">{cartTotal}</TotalPrice>
             <QuantityContainer>
-              <Icon
+              <Feather
                 size={15}
                 color="#6C6C80"
                 name="minus"
@@ -185,7 +185,7 @@ const FoodDetails: React.FC = () => {
               <AdittionalItemText testID="food-quantity">
                 {foodQuantity}
               </AdittionalItemText>
-              <Icon
+              <Feather
                 size={15}
                 color="#6C6C80"
                 name="plus"
@@ -201,7 +201,7 @@ const FoodDetails: React.FC = () => {
           >
             <ButtonText>Confirmar pedido</ButtonText>
             <IconContainer>
-              <Icon name="check-square" size={24} color="#fff" />
+              <Feather name="check-square" size={24} color="#fff" />
             </IconContainer>
           </FinishOrderButton>
         </TotalContainer>

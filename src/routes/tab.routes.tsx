@@ -1,6 +1,6 @@
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import Icon from 'react-native-vector-icons/Feather';
+import { Feather } from '@react-native-vector-icons/feather';
 
 import Dashboard from '../pages/Dashboard';
 import Favorites from '../pages/Favorites';
@@ -29,7 +29,9 @@ const TabRoutes: React.FC = () => (
   >
     <Tab.Screen
       options={{
-        tabBarIcon: ({ color }) => <Icon size={25} name="list" color={color} />,
+        tabBarIcon: ({ color }) => (
+          <Feather size={25} name="list" color={color} />
+        ),
         title: 'Listagem',
         headerShown: false,
       }}
@@ -40,7 +42,7 @@ const TabRoutes: React.FC = () => (
       name="Orders"
       options={{
         tabBarIcon: ({ color }) => (
-          <Icon size={25} name="shopping-bag" color={color} />
+          <Feather size={25} name="shopping-bag" color={color} />
         ),
         title: 'Pedidos',
         headerShown: false,
@@ -52,7 +54,7 @@ const TabRoutes: React.FC = () => (
       name="Favorites"
       options={{
         tabBarIcon: ({ color }) => (
-          <Icon size={25} name="heart" color={color} />
+          <Feather size={25} name="heart" color={color} />
         ),
         title: 'Favoritos',
         headerShown: false,

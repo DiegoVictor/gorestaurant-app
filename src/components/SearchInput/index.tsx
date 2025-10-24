@@ -1,7 +1,8 @@
 import React, { useState, useCallback } from 'react';
 import { TextInputProps } from 'react-native';
 
-import { Container, TextInput, Icon } from './styles';
+import { Container, TextInput } from './styles';
+import { Feather } from '@react-native-vector-icons/feather';
 
 interface InputProps extends TextInputProps {
   name?: string;
@@ -23,8 +24,9 @@ const SearchInput: React.FC<InputProps> = ({ value = '', ...rest }) => {
 
   return (
     <Container testID="search-container" isFocused={isFocused}>
-      <Icon
+      <Feather
         testID="search-icon"
+        style={{ marginRight: 16 }}
         name="search"
         size={20}
         color={isFocused || isFilled ? '#c72828' : '#b7b7cc'}

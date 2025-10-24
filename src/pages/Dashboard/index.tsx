@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Image, ScrollView } from 'react-native';
-import Icon from 'react-native-vector-icons/Feather';
+import { Feather } from '@react-native-vector-icons/feather';
 import { useNavigation } from '@react-navigation/native';
 
 import Logo from '../../assets/logo-header.png';
@@ -104,7 +104,7 @@ const Dashboard: React.FC = () => {
     <Container>
       <Header>
         <Image source={Logo} />
-        <Icon
+        <Feather
           testID="back"
           name="log-out"
           size={24}

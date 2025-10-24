@@ -1,7 +1,7 @@
 import React from 'react';
 import { Image } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import Icon from 'react-native-vector-icons/Feather';
+import { Feather } from '@react-native-vector-icons/feather';
 
 import Background from '../../assets/home-background.png';
 import Logo from '../../assets/logo.png';
@@ -42,7 +42,7 @@ const Home: React.FC = () => {
         <NavigationButton onPress={() => handleNavigate()}>
           <ButtonText>Entrar no Restaurante</ButtonText>
           <IconContainer>
-            <Icon name="log-in" size={24} color="#7A1818" />
+            <Feather name="log-in" size={24} color="#7A1818" />
           </IconContainer>
         </NavigationButton>
       </Content>

@@ -2,7 +2,7 @@ import React, { useMemo, useState, useCallback, useEffect } from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import { NavigationContainer } from '@react-navigation/native';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
-import Icon from 'react-native-vector-icons/Feather';
+import { Feather } from '@react-native-vector-icons/feather';
 import { Alert } from 'react-native';
 
 import api from '../services/api';
@@ -107,7 +107,7 @@ const AppRoutes: React.FC = () => {
           component={FoodDetails}
           options={({ navigation, route }) => ({
             headerLeft: () => (
-              <Icon
+              <Feather
                 name="arrow-left"
                 size={24}
                 color="#FFB84D"
