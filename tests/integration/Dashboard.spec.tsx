@@ -32,9 +32,7 @@ interface Category {
 const mockedNavigate = jest.fn();
 
 jest.mock('@react-navigation/native', () => {
-  const current = jest.requireActual('@react-navigation/native');
   return {
-    ...current,
     useNavigation: () => ({
       navigate: mockedNavigate,
     }),
