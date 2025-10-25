@@ -15,6 +15,7 @@ import {
   FoodTitle,
   FoodDescription,
   FoodPricing,
+  Product,
 } from './styles';
 
 interface Food {
@@ -52,8 +53,8 @@ const Orders: React.FC = () => {
       <FoodsContainer>
         <FoodList
           data={orders}
-          keyExtractor={item => String(item.id)}
-          renderItem={({ item }) => (
+          keyExtractor={(item: Product) => String(item.id)}
+          renderItem={({ item }: { item: Product }) => (
             <Food key={item.id} activeOpacity={0.6}>
               <FoodImageContainer>
                 <Image
