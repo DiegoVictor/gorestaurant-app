@@ -91,7 +91,7 @@ const Dashboard: React.FC = () => {
 
   useEffect(() => {
     (async () => {
-      const { data } = await api.get('categories');
+      const { data } = await api.get<Category[]>('categories');
       setCategories(data);
     })();
   }, []);

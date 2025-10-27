@@ -53,8 +53,8 @@ const Favorites: React.FC = () => {
       <FoodsContainer>
         <FoodList
           data={favorites}
-          keyExtractor={item => String(item.id)}
-          renderItem={({ item }) => (
+          keyExtractor={(item: Food) => String(item.id)}
+          renderItem={({ item }: { item: Food }) => (
             <Food activeOpacity={0.6}>
               <FoodImageContainer>
                 <Image
