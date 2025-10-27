@@ -1,4 +1,3 @@
-import React from 'react';
 import { render, fireEvent } from '@testing-library/react-native';
 
 import SearchInput from '../../src/components/SearchInput';
@@ -7,12 +6,12 @@ interface IconProps {
   color: string;
 }
 
-jest.mock('react-native-vector-icons/Feather', () => {
-  const styled = require('styled-components/native');
-  const Icon = styled.default.Text<IconProps>`
-    color: ${({ color }) => color || '#b7b7cc'};
-  `;
-  return Icon;
+jest.mock('@react-native-vector-icons/feather', () => {
+  return {
+    Feather: ({ color, ...props }: IconProps) => {
+      return <div {...props} style={{ color }}></div>;
+    },
+  };
 });
 
 describe('SearchInput', () => {
