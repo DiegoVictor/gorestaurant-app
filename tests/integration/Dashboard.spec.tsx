@@ -161,10 +161,10 @@ describe('Dashboard', () => {
 
     const { getByText, queryByText, getByTestId } = render(<Dashboard />);
 
-    await waitFor(() => expect(getByText(category.title)).toBeTruthy());
+    await waitFor(() => getByTestId(`category-title-${category.id}`));
 
-    categories.forEach(({ title }) => {
-      expect(getByText(title)).toBeTruthy();
+    categories.forEach(({ id }) => {
+      expect(getByTestId(`category-title-${id}`)).toBeTruthy();
     });
 
     orders.forEach(({ name }) => {

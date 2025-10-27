@@ -141,7 +141,9 @@ const Dashboard: React.FC = () => {
                   style={{ width: 56, height: 56 }}
                   source={{ uri: category.image_url }}
                 />
-                <CategoryItemTitle>{category.title}</CategoryItemTitle>
+                <CategoryItemTitle testID={`category-title-${category.id}`}>
+                  {category.title}
+                </CategoryItemTitle>
               </CategoryItem>
             ))}
           </CategorySlider>
