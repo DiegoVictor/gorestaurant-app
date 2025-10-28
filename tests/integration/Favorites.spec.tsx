@@ -33,21 +33,22 @@ jest.mock('@react-navigation/native', () => {
   };
 });
 
-describe('Favorites', () => {
-  const apiMock = new AxiosMock(api);
+const apiMock = new AxiosMock(api);
 
+describe('Favorites', () => {
   it('should be able to list the favorite food plates', async () => {
     const orders = await factory.attrsMany<Order>('Order', 2);
 
     apiMock.onGet('/favorites').reply(200, orders);
 
-    const { getByText } = render(<Favorites />);
+    const { getByText, findByText } = render(<Favorites />);
 
-    await waitFor(() => expect(getByText(orders[0].name)).toBeTruthy());
+    const [order] = orders;
+    await waitFor(() => findByText(order.name));
 
-    orders.forEach(order => {
-      expect(getByText(order.name)).toBeTruthy();
-      expect(getByText(order.description)).toBeTruthy();
+    orders.forEach(({ name, description }) => {
+      expect(getByText(name)).toBeTruthy();
+      expect(getByText(description)).toBeTruthy();
     });
   });
 });
