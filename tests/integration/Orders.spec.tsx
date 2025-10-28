@@ -24,7 +24,6 @@ interface Order {
 }
 
 const mockedNavigate = jest.fn();
-
 jest.mock('@react-navigation/native', () => {
   return {
     useNavigation: () => ({
@@ -33,9 +32,9 @@ jest.mock('@react-navigation/native', () => {
   };
 });
 
-describe('Orders', () => {
-  const apiMock = new AxiosMock(api);
+const apiMock = new AxiosMock(api);
 
+describe('Orders', () => {
   it('should be able to list the orders', async () => {
     const orders = await factory.attrsMany<Order>('Order', 2);
 
@@ -43,11 +42,12 @@ describe('Orders', () => {
 
     const { getByText } = render(<Orders />);
 
-    await waitFor(() => expect(getByText(orders[0].name)).toBeTruthy());
+    const [order] = orders;
+    await waitFor(() => getByText(order.name));
 
-    orders.forEach(order => {
-      expect(getByText(order.name)).toBeTruthy();
-      expect(getByText(order.description)).toBeTruthy();
+    orders.forEach(({ name, description }) => {
+      expect(getByText(name)).toBeTruthy();
+      expect(getByText(description)).toBeTruthy();
     });
   });
 });
