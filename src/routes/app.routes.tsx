@@ -6,7 +6,7 @@ import { Feather } from '@react-native-vector-icons/feather';
 import { Alert } from 'react-native';
 
 import api from '../services/api';
-import TabRoutes from './tab.routes';
+import TabRoutes, { BottomTabParamList } from './tab.routes';
 import Home from '../pages/Home';
 import FoodDetails from '../pages/FoodDetails';
 
@@ -14,7 +14,27 @@ interface Params {
   id: number;
 }
 
-const App = createStackNavigator();
+interface Food {
+  id: number;
+  name: string;
+  description: string;
+  price: number;
+  category: number;
+  image_url: string;
+  thumbnail_url: string;
+}
+
+export type StackParamList = {
+  Home: undefined;
+  TabMenu: {
+    screen: keyof BottomTabParamList;
+  };
+  Food: {
+    id: number;
+  };
+};
+
+const App = createStackNavigator<StackParamList>();
 
 const AppRoutes: React.FC = () => {
   const [foodId, setFoodId] = useState<number | undefined>();
@@ -25,50 +45,47 @@ const AppRoutes: React.FC = () => {
     [isFavorite],
   );
 
-  const toggleFavorite = useCallback(
-    async id => {
-      if (!loading) {
-        setIsFavorite(state => !state);
+  const toggleFavorite = async (id: number) => {
+    if (!loading) {
+      setIsFavorite(state => !state);
 
-        setLoading(true);
-        if (isFavorite) {
-          try {
-            await api.delete(`/favorites/${id}`);
-          } catch (err) {
-            Alert.alert('Não foi possivel remover favorito');
-            setIsFavorite(state => !state);
-          }
-        } else {
-          try {
-            const {
-              data: {
-                name,
-                description,
-                price,
-                category,
-                image_url,
-                thumbnail_url,
-              },
-            } = await api.get(`/foods/${id}`);
-            await api.post('favorites', {
-              id,
+      setLoading(true);
+      if (isFavorite) {
+        try {
+          await api.delete(`/favorites/${id}`);
+        } catch (err) {
+          Alert.alert('Não foi possivel remover favorito');
+          setIsFavorite(state => !state);
+        }
+      } else {
+        try {
+          const {
+            data: {
               name,
               description,
               price,
               category,
               image_url,
               thumbnail_url,
-            });
-          } catch (err) {
-            setIsFavorite(state => !state);
-          }
+            },
+          } = await api.get<Food>(`/foods/${id}`);
+          await api.post('favorites', {
+            id,
+            name,
+            description,
+            price,
+            category,
+            image_url,
+            thumbnail_url,
+          });
+        } catch (err) {
+          setIsFavorite(state => !state);
         }
-
-        setLoading(false);
       }
-    },
-    [isFavorite, loading],
-  );
+
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
     api

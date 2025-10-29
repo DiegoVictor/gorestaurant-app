@@ -6,7 +6,13 @@ import Dashboard from '../pages/Dashboard';
 import Favorites from '../pages/Favorites';
 import Orders from '../pages/Orders';
 
-const Tab = createBottomTabNavigator();
+export type BottomTabParamList = {
+  Dashboard: undefined;
+  Orders: undefined;
+  Favorites: undefined;
+};
+
+const Tab = createBottomTabNavigator<BottomTabParamList>();
 
 const TabRoutes: React.FC = () => (
   <Tab.Navigator
