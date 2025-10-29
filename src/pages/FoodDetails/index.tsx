@@ -118,7 +118,7 @@ const FoodDetails: React.FC = () => {
       },
       extras,
     });
-    navigation.navigate('Dashboard');
+    navigation.navigate('Home');
   }
 
   return (

@@ -95,7 +95,7 @@ const AppRoutes: React.FC = () => {
           component={Home}
         />
         <App.Screen
-          name="MainBottom"
+          name="TabMenu"
           component={TabRoutes}
           options={{
             headerShown: false,
@@ -103,7 +103,7 @@ const AppRoutes: React.FC = () => {
           }}
         />
         <App.Screen
-          name="FoodDetails"
+          name="Food"
           component={FoodDetails}
           options={({ navigation, route }) => ({
             headerLeft: () => (

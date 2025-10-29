@@ -35,7 +35,7 @@ const TabRoutes: React.FC = () => (
         title: 'Listagem',
         headerShown: false,
       }}
-      name="DashboardStack"
+      name="Dashboard"
       component={Dashboard}
     />
     <Tab.Screen
