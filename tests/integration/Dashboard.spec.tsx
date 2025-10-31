@@ -103,9 +103,11 @@ describe('Dashboard', () => {
       .onGet('/categories')
       .reply(200, categories);
 
-    const { getByText, queryByText, getByTestId } = render(<Dashboard />);
+    const { getByText, queryByText, getByTestId, findByText } = render(
+      <Dashboard />,
+    );
 
-    await waitFor(() => expect(getByText(category.title)).toBeTruthy());
+    await waitFor(() => findByText(category.title));
 
     categories.forEach(({ title }) => {
       expect(getByText(title)).toBeTruthy();
