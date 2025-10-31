@@ -332,6 +332,6 @@ describe('FoodDetails', () => {
       fireEvent.press(getByTestId('finish'));
     });
 
-    expect(mockedNavigate).toHaveBeenCalledWith('Dashboard');
+    expect(mockedNavigate).toHaveBeenCalledWith('Home');
   });
 });

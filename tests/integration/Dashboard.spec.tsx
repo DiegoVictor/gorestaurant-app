@@ -224,7 +224,7 @@ describe('Dashboard', () => {
 
     expect(getByTestId(`food-${order.id}`)).toBeTruthy();
     expect(mockedNavigate).toHaveBeenCalledTimes(1);
-    expect(mockedNavigate).toHaveBeenCalledWith('FoodDetails', {
+    expect(mockedNavigate).toHaveBeenCalledWith('Food', {
       id: order.id,
     });
   });
