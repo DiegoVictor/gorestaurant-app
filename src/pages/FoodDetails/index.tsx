@@ -29,6 +29,8 @@ import {
   ButtonText,
   IconContainer,
 } from './styles';
+import { StackScreenProps } from '@react-navigation/stack';
+import { StackParamList } from 'src/routes/app.routes';
 
 interface Params {
   id: number;
@@ -53,12 +55,14 @@ interface Food {
   extras: Extra[];
 }
 
+type NavigateProps = StackScreenProps<StackParamList>['navigation'];
+
 const FoodDetails: React.FC = () => {
   const [food, setFood] = useState({} as Food);
   const [extras, setExtras] = useState<Extra[]>([]);
   const [foodQuantity, setFoodQuantity] = useState(1);
 
-  const navigation = useNavigation();
+  const navigation = useNavigation<NavigateProps>();
   const route = useRoute();
 
   const routeParams = route.params as Params;

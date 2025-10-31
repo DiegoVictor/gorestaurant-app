@@ -26,6 +26,8 @@ import {
   FoodDescription,
   FoodPricing,
 } from './styles';
+import { StackScreenProps } from '@react-navigation/stack';
+import { StackParamList } from 'src/routes/app.routes';
 
 interface Food {
   id: number;
@@ -47,6 +49,8 @@ interface FoodRequest {
   name_like?: string;
 }
 
+type NavigateProps = StackScreenProps<StackParamList>['navigation'];
+
 const Dashboard: React.FC = () => {
   const [foods, setFoods] = useState<Food[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
@@ -55,7 +59,7 @@ const Dashboard: React.FC = () => {
   >();
   const [searchValue, setSearchValue] = useState('');
 
-  const navigation = useNavigation();
+  const navigation = useNavigation<NavigateProps>();
 
   async function handleNavigate(id: number): Promise<void> {
     navigation.navigate('Food', { id });
