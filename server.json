@@ -1,7 +1,7 @@
 {
   "foods": [
     {
-      "id": 1,
+      "id": "1",
       "name": "Ao molho",
       "description": "Macarrão ao molho branco, fughi e cheiro verde das montanhas.",
       "price": 19.9,
@@ -22,7 +22,7 @@
       ]
     },
     {
-      "id": 2,
+      "id": "2",
       "name": "Veggie",
       "description": "Macarrão com pimentão, ervilha e ervas finas colhidas no himalaia.",
       "price": "21.90",
@@ -38,7 +38,7 @@
       ]
     },
     {
-      "id": 3,
+      "id": "3",
       "name": "A la Camarón",
       "description": "Macarrão com vegetais de primeira linha e camarão dos 7 mares.",
       "price": "25.90",
@@ -56,24 +56,24 @@
   ],
   "categories": [
     {
-      "id": 1,
+      "id": "1",
       "title": "Massas",
       "image_url": "https://storage.googleapis.com/golden-wind/bootcamp-gostack/desafio-gorestaurant-mobile/massas.png"
     },
     {
-      "id": 2,
+      "id": "2",
       "title": "Pizzas",
       "image_url": "https://storage.googleapis.com/golden-wind/bootcamp-gostack/desafio-gorestaurant-mobile/pizzas.png"
     },
     {
-      "id": 3,
+      "id": "3",
       "title": "Carnes",
       "image_url": "https://storage.googleapis.com/golden-wind/bootcamp-gostack/desafio-gorestaurant-mobile/carnes.png"
     }
   ],
   "orders": [
     {
-      "id": 1,
+      "id": "1",
       "product_id": 1,
       "name": "Ao molho",
       "description": "Macarrão ao molho branco, fughi e cheiro verde das montanhas.",
@@ -92,7 +92,7 @@
   ],
   "favorites": [
     {
-      "id": 2,
+      "id": "2",
       "name": "Veggie",
       "description": "Macarrão com pimentão, ervilha e ervas finas colhidas no himalaia.",
       "price": "21.90",
