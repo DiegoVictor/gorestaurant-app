@@ -1,6 +1,5 @@
 import React, { useState, useCallback } from 'react';
 import { TextInputProps } from 'react-native';
-
 import { Container, TextInput } from './styles';
 import { Feather } from '@react-native-vector-icons/feather';
 
@@ -8,7 +7,7 @@ interface InputProps extends TextInputProps {
   name?: string;
 }
 
-const SearchInput: React.FC<InputProps> = ({ value = '', ...rest }) => {
+export const Input: React.FC<InputProps> = ({ value = '', ...rest }) => {
   const [isFocused, setIsFocused] = useState(false);
   const [isFilled, setIsFilled] = useState(false);
 
@@ -43,5 +42,3 @@ const SearchInput: React.FC<InputProps> = ({ value = '', ...rest }) => {
     </Container>
   );
 };
-
-export default SearchInput;
