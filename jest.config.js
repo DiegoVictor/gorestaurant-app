@@ -1,7 +1,8 @@
 module.exports = {
-  moduleNameMapper: {
-    '\\.(ttf)$': '<rootDir>/tests/mocks/file-mock.js',
-  },
-  preset: 'react-native',
-  transformIgnorePatterns: ['node_modules/(?!(react-native|@react-native)/)'],
+  collectCoverage: true,
+  coverageDirectory: 'tests/coverage',
+  preset: 'jest-expo',
+  transformIgnorePatterns: [
+    'node_modules/(?!((jest-)?react-native|@react-native(-community)?)|expo(nent)?|@expo(nent)?/.*|@expo-google-fonts/.*|react-navigation|@react-navigation/.*|@sentry/react-native|native-base|react-native-svg|@faker-js/faker)',
+  ],
 };
