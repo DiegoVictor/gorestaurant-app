@@ -1,9 +1,6 @@
 import React from 'react';
+import { App } from './app.routes';
 
-import AppRoutes from './app.routes';
-
-const Routes: React.FC = () => {
-  return <AppRoutes />;
+export const Router: React.FC = () => {
+  return <App />;
 };
-
-export default Routes;
