@@ -14,7 +14,7 @@ interface Params {
   id: number;
 }
 
-interface Food {
+interface FoodDetail {
   id: number;
   name: string;
   description: string;
@@ -29,7 +29,7 @@ export type StackParamList = {
   TabMenu: {
     screen: keyof BottomTabParamList;
   };
-  Food: {
+  FoodDetail: {
     id: number;
   };
 };
@@ -68,7 +68,7 @@ const AppRoutes: React.FC = () => {
               image_url,
               thumbnail_url,
             },
-          } = await api.get<Food>(`/foods/${id}`);
+          } = await api.get<FoodDetail>(`/foods/${id}`);
           await api.post('favorites', {
             id,
             name,
@@ -120,7 +120,7 @@ const AppRoutes: React.FC = () => {
           }}
         />
         <App.Screen
-          name="Food"
+          name="FoodDetail"
           component={FoodDetails}
           options={({ navigation, route }) => ({
             headerLeft: () => (
