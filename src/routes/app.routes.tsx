@@ -34,7 +34,7 @@ export type StackParamList = {
   };
 };
 
-const App = createStackNavigator<StackParamList>();
+const Stack = createStackNavigator<StackParamList>();
 
 const AppRoutes: React.FC = () => {
   const [foodId, setFoodId] = useState<number | undefined>();
@@ -102,8 +102,8 @@ const AppRoutes: React.FC = () => {
 
   return (
     <NavigationContainer>
-      <App.Navigator initialRouteName="Home">
-        <App.Screen
+      <Stack.Navigator initialRouteName="Home">
+        <Stack.Screen
           options={{
             cardStyle: { backgroundColor: '#C72828' },
             headerShown: false,
@@ -111,7 +111,7 @@ const AppRoutes: React.FC = () => {
           name="Home"
           component={Home}
         />
-        <App.Screen
+        <Stack.Screen
           name="TabMenu"
           component={TabRoutes}
           options={{
@@ -119,7 +119,7 @@ const AppRoutes: React.FC = () => {
             gestureEnabled: false,
           }}
         />
-        <App.Screen
+        <Stack.Screen
           name="FoodDetail"
           component={FoodDetails}
           options={({ navigation, route }) => ({
@@ -171,7 +171,7 @@ const AppRoutes: React.FC = () => {
             },
           })}
         />
-      </App.Navigator>
+      </Stack.Navigator>
     </NavigationContainer>
   );
 };
