@@ -1,7 +1,7 @@
 import React, { useMemo, useState, useCallback, useEffect } from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import { NavigationContainer } from '@react-navigation/native';
-import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
+import { MaterialIcons } from '@react-native-vector-icons/material-icons';
 import { Feather } from '@react-native-vector-icons/feather';
 import { Alert } from 'react-native';
 
@@ -142,7 +142,7 @@ const AppRoutes: React.FC = () => {
 
               // Add the favorite icon on the right of the header bar
               return (
-                <MaterialIcon
+                <MaterialIcons
                   name={favoriteIconName}
                   size={24}
                   color="#FFB84D"
