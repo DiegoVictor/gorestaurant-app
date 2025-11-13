@@ -27,7 +27,7 @@ interface Food {
   formattedPrice: string;
 }
 
-const Favorites: React.FC = () => {
+export const Favorites: React.FC = () => {
   const [favorites, setFavorites] = useState<Food[]>([]);
 
   useEffect(() => {
@@ -74,5 +74,3 @@ const Favorites: React.FC = () => {
     </Container>
   );
 };
-
-export default Favorites;

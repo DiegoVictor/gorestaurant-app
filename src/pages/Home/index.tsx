@@ -20,7 +20,7 @@ import { StackParamList } from 'src/routes/app.routes';
 
 type NavigateProps = StackScreenProps<StackParamList>['navigation'];
 
-const Home: React.FC = () => {
+export const Home: React.FC = () => {
   const navigation = useNavigation<NavigateProps>();
 
   async function handleNavigate(): Promise<void> {
@@ -53,5 +53,3 @@ const Home: React.FC = () => {
     </Container>
   );
 };
-
-export default Home;

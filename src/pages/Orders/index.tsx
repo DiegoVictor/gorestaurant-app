@@ -27,7 +27,7 @@ interface Food {
   thumbnail_url: string;
 }
 
-const Orders: React.FC = () => {
+export const Orders: React.FC = () => {
   const [orders, setOrders] = useState<Food[]>([]);
 
   useEffect(() => {
@@ -74,5 +74,3 @@ const Orders: React.FC = () => {
     </Container>
   );
 };
-
-export default Orders;

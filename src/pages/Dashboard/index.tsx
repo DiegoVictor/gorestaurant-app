@@ -51,7 +51,7 @@ interface FoodRequest {
 
 type NavigateProps = StackScreenProps<StackParamList>['navigation'];
 
-const Dashboard: React.FC = () => {
+export const Dashboard: React.FC = () => {
   const [foods, setFoods] = useState<Food[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
   const [selectedCategory, setSelectedCategory] = useState<
@@ -181,5 +181,3 @@ const Dashboard: React.FC = () => {
     </Container>
   );
 };
-
-export default Dashboard;
