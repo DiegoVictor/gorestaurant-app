@@ -13,7 +13,7 @@ export type BottomTabParamList = {
 
 const Tab = createBottomTabNavigator<BottomTabParamList>();
 
-const TabRoutes: React.FC = () => (
+export const TabRouter: React.FC = () => (
   <Tab.Navigator
     screenOptions={{
       tabBarActiveTintColor: '#C72828',
@@ -68,5 +68,3 @@ const TabRoutes: React.FC = () => (
     />
   </Tab.Navigator>
 );
-
-export default TabRoutes;
