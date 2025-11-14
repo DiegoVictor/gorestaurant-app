@@ -2,9 +2,9 @@ import React, { useEffect, useState, useMemo } from 'react';
 import { Image } from 'react-native';
 import { Feather } from '@react-native-vector-icons/feather';
 import { useNavigation, useRoute } from '@react-navigation/native';
-
-import formatValue from '../../utils/formatValue';
-import api from '../../services/api';
+import { StackScreenProps } from '@react-navigation/stack';
+import { formatValue } from '../../utils/formatValue';
+import { api } from '../../services/api';
 import {
   Container,
   Header,
@@ -29,8 +29,7 @@ import {
   ButtonText,
   IconContainer,
 } from './styles';
-import { StackScreenProps } from '@react-navigation/stack';
-import { StackParamList } from 'src/routes/app.routes';
+import { StackParamList } from '../../routes/app.routes';
 
 interface Params {
   id: number;
@@ -57,8 +56,8 @@ interface Food {
 
 type NavigateProps = StackScreenProps<StackParamList>['navigation'];
 
-const FoodDetails: React.FC = () => {
-  const [food, setFood] = useState({} as Food);
+export const FoodDetail: React.FC = () => {
+  const [food, setFood] = useState<Food>();
   const [extras, setExtras] = useState<Extra[]>([]);
   const [foodQuantity, setFoodQuantity] = useState(1);
 
@@ -76,7 +75,7 @@ const FoodDetails: React.FC = () => {
     }
 
     loadFood();
-  }, [routeParams]);
+  }, [routeParams.id]);
 
   function handleIncrementExtra(id: number): void {
     const extraIndex = extras.findIndex(extra => extra.id === id);
@@ -106,12 +105,14 @@ const FoodDetails: React.FC = () => {
   }
 
   const cartTotal = useMemo(() => {
-    const extrasTotal = extras.reduce(
-      (price, extra) => extra.value * extra.quantity + price,
-      0,
-    );
+    if (food) {
+      const extrasTotal = extras.reduce(
+        (price, extra) => extra.value * extra.quantity + price,
+        0,
+      );
 
-    return formatValue(food.price * foodQuantity + extrasTotal);
+      return formatValue(food?.price * foodQuantity + extrasTotal);
+    }
   }, [extras, food, foodQuantity]);
 
   async function handleFinishOrder(): Promise<void> {
@@ -136,14 +137,14 @@ const FoodDetails: React.FC = () => {
               <Image
                 style={{ width: 327, height: 183 }}
                 source={{
-                  uri: food.image_url,
+                  uri: food?.image_url,
                 }}
               />
             </FoodImageContainer>
             <FoodContent>
-              <FoodTitle>{food.name}</FoodTitle>
-              <FoodDescription>{food.description}</FoodDescription>
-              <FoodPricing>{food.formattedPrice}</FoodPricing>
+              <FoodTitle>{food?.name}</FoodTitle>
+              <FoodDescription>{food?.description}</FoodDescription>
+              <FoodPricing>{food?.formattedPrice}</FoodPricing>
             </FoodContent>
           </Food>
         </FoodsContainer>
@@ -213,5 +214,3 @@ const FoodDetails: React.FC = () => {
     </Container>
   );
 };
-
-export default FoodDetails;
