@@ -40,7 +40,6 @@ export const FoodsContainer = styled.View`
 export const FoodList = styled(FlatList as new () => FlatList<Food>)`
   flex: 1;
   padding: 0 20px;
-
   margin-top: 16px;
 `;
 

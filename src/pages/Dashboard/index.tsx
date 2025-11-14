@@ -60,7 +60,6 @@ export const Dashboard: React.FC = () => {
   const [searchValue, setSearchValue] = useState('');
 
   const navigation = useNavigation<NavigateProps>();
-
   async function handleNavigate(id: number): Promise<void> {
     navigation.navigate('FoodDetail', { id });
   }
@@ -80,6 +79,7 @@ export const Dashboard: React.FC = () => {
       const { data } = await api.get<Food[]>('foods', {
         params,
       });
+
       setFoods(
         data.map(food => ({
           ...food,

@@ -2,7 +2,6 @@ import React from 'react';
 import { Image } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { Feather } from '@react-native-vector-icons/feather';
-
 import Background from '../../assets/home-background.png';
 import Logo from '../../assets/logo.png';
 import {

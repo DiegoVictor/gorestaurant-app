@@ -36,6 +36,7 @@ const AppRoutes: React.FC = () => {
   const [foodId, setFoodId] = useState<number | undefined>();
   const [loading, setLoading] = useState(false);
   const [isFavorite, setIsFavorite] = useState(false);
+
   const favoriteIconName = useMemo(
     () => (isFavorite ? 'favorite' : 'favorite-border'),
     [isFavorite],
