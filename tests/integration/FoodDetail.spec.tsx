@@ -1,12 +1,9 @@
-import 'intl';
-import 'intl/locale-data/jsonp/pt-BR';
 import React from 'react';
 import { render, waitFor, act, fireEvent } from '@testing-library/react-native';
 import AxiosMock from 'axios-mock-adapter';
-
-import api from '../../src/services/api';
-import FoodDetails from '../../src/pages/FoodDetails';
-import formatValue from '../../src/utils/formatValue';
+import { api } from '../../src/services/api';
+import { FoodDetail } from '../../src/pages/FoodDetail';
+import { formatValue } from '../../src/utils/formatValue';
 import factory from '../utils/factory';
 
 interface Order {
@@ -26,16 +23,16 @@ interface Extra {
   value: number;
 }
 
-jest.mock('../../src/utils/formatValue.ts', () => ({
-  __esModule: true,
-  default: jest.fn().mockImplementation((value: number) => {
-    const [reals, cents = '00'] = value.toString().split('.');
-    return `R$ ${reals},${`${cents}00`.slice(0, 2)}`;
-  }),
-}));
+jest.mock('../../src/utils/formatValue.ts', () => {
+  return {
+    formatValue: (value: number) => {
+      const [reals, cents = '00'] = value.toString().split('.');
+      return `R$ ${reals},${`${cents}00`.slice(0, 2)}`;
+    },
+  };
+});
 
 const mockedNavigate = jest.fn();
-
 jest.mock('@react-navigation/native', () => {
   return {
     useNavigation: () => ({
@@ -50,9 +47,9 @@ jest.mock('@react-navigation/native', () => {
   };
 });
 
-describe('FoodDetails', () => {
-  const apiMock = new AxiosMock(api);
+const apiMock = new AxiosMock(api);
 
+describe('FoodDetail', () => {
   beforeEach(() => {
     mockedNavigate.mockClear();
   });
@@ -66,9 +63,9 @@ describe('FoodDetails', () => {
       .onGet('/favorites/1')
       .reply(200, order);
 
-    const { getByText, getByTestId } = render(<FoodDetails />);
+    const { getByText, getByTestId } = render(<FoodDetail />);
 
-    await waitFor(() => expect(getByText(order.name)).toBeTruthy());
+    await waitFor(() => getByText(order.name));
 
     expect(getByText(order.name)).toBeTruthy();
     expect(getByText(order.description)).toBeTruthy();
@@ -89,9 +86,9 @@ describe('FoodDetails', () => {
 
     apiMock.onGet('/foods/1').reply(200, order);
 
-    const { getByText, getByTestId } = render(<FoodDetails />);
+    const { getByText, getByTestId } = render(<FoodDetail />);
 
-    await waitFor(() => expect(getByText(order.name)).toBeTruthy());
+    await waitFor(() => getByText(order.name));
 
     expect(getByText(order.name)).toBeTruthy();
     expect(getByText(order.description)).toBeTruthy();
@@ -118,9 +115,9 @@ describe('FoodDetails', () => {
 
     apiMock.onGet('/foods/1').reply(200, order);
 
-    const { getByText, getByTestId } = render(<FoodDetails />);
+    const { getByText, getByTestId } = render(<FoodDetail />);
 
-    await waitFor(() => expect(getByText(order.name)).toBeTruthy());
+    await waitFor(() => getByText(order.name));
 
     expect(getByText(order.name)).toBeTruthy();
     expect(getByText(order.description)).toBeTruthy();
@@ -165,9 +162,9 @@ describe('FoodDetails', () => {
 
     apiMock.onGet('/foods/1').reply(200, order);
 
-    const { getByText, getByTestId } = render(<FoodDetails />);
+    const { getByText, getByTestId } = render(<FoodDetail />);
 
-    await waitFor(() => expect(getByText(order.name)).toBeTruthy());
+    await waitFor(() => getByText(order.name));
 
     expect(getByText(order.name)).toBeTruthy();
     expect(getByText(order.description)).toBeTruthy();
@@ -203,9 +200,9 @@ describe('FoodDetails', () => {
 
     apiMock.onGet('/foods/1').reply(200, order);
 
-    const { getByText, getByTestId } = render(<FoodDetails />);
+    const { getByText, getByTestId } = render(<FoodDetail />);
 
-    await waitFor(() => expect(getByText(order.name)).toBeTruthy());
+    await waitFor(() => getByText(order.name));
 
     expect(getByText(order.name)).toBeTruthy();
     expect(getByText(order.description)).toBeTruthy();
@@ -239,9 +236,9 @@ describe('FoodDetails', () => {
 
     apiMock.onGet('/foods/1').reply(200, order);
 
-    const { getByText, getByTestId } = render(<FoodDetails />);
+    const { getByText, getByTestId } = render(<FoodDetail />);
 
-    await waitFor(() => expect(getByText(order.name)).toBeTruthy());
+    await waitFor(() => getByText(order.name));
 
     expect(getByText(order.name)).toBeTruthy();
     expect(getByText(order.description)).toBeTruthy();
@@ -279,9 +276,9 @@ describe('FoodDetails', () => {
 
     apiMock.onGet('/foods/1').reply(200, order);
 
-    const { getByText, getByTestId } = render(<FoodDetails />);
+    const { getByText, getByTestId } = render(<FoodDetail />);
 
-    await waitFor(() => expect(getByText(order.name)).toBeTruthy());
+    await waitFor(() => getByText(order.name));
 
     expect(getByText(order.name)).toBeTruthy();
     expect(getByText(order.description)).toBeTruthy();
@@ -312,9 +309,9 @@ describe('FoodDetails', () => {
       .onPost('orders')
       .reply(200, order);
 
-    const { getByText, getByTestId } = render(<FoodDetails />);
+    const { getByText, getByTestId } = render(<FoodDetail />);
 
-    await waitFor(() => expect(getByText(order.name)).toBeTruthy());
+    await waitFor(() => getByText(order.name));
 
     expect(getByText(order.name)).toBeTruthy();
     expect(getByText(order.description)).toBeTruthy();
