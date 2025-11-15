@@ -1,6 +1,6 @@
 import { render, fireEvent } from '@testing-library/react-native';
 
-import SearchInput from '../../src/components/SearchInput';
+import { Input } from '../../src/components/Input';
 
 interface IconProps {
   color: string;
@@ -18,7 +18,7 @@ describe('SearchInput', () => {
   it('should be able highlight the icon when input is focused', async () => {
     let text = '';
     const { getByTestId } = render(
-      <SearchInput
+      <Input
         value={text}
         onChangeText={value => {
           text = value;
@@ -37,14 +37,14 @@ describe('SearchInput', () => {
   });
 
   it('should be able to render without previous value', async () => {
-    const { getByTestId } = render(<SearchInput />);
+    const { getByTestId } = render(<Input />);
     const inputSearch = getByTestId('search-input');
 
     expect(inputSearch).toBeTruthy();
   });
 
   it('should be able highlight the icon when input is filled', async () => {
-    const { getByTestId } = render(<SearchInput value="Veggie" />);
+    const { getByTestId } = render(<Input value="Veggie" />);
 
     const inputSearch = getByTestId('search-input');
     const icon = getByTestId('search-icon');
