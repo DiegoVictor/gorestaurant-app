@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Image, ListRenderItemInfo } from 'react-native';
-
-import api from '../../services/api';
-import formatValue from '../../utils/formatValue';
+import { api } from '../../services/api';
+import { formatValue } from '../../utils/formatValue';
 import {
   Container,
   Header,
