@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Image } from 'react-native';
+import { Image, ListRenderItemInfo } from 'react-native';
 
 import api from '../../services/api';
 import formatValue from '../../utils/formatValue';
@@ -54,7 +54,7 @@ export const Orders: React.FC = () => {
         <FoodList
           data={orders}
           keyExtractor={(item: Product) => String(item.id)}
-          renderItem={({ item }: { item: Product }) => (
+          renderItem={({ item }: ListRenderItemInfo<Product>) => (
             <Food key={item.id} activeOpacity={0.6}>
               <FoodImageContainer>
                 <Image
