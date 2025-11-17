@@ -1,9 +1,8 @@
 import React from 'react';
 import { render, act, fireEvent, waitFor } from '@testing-library/react-native';
 import AxiosMock from 'axios-mock-adapter';
-
-import api from '../../src/services/api';
-import Dashboard from '../../src/pages/Dashboard';
+import { api } from '../../src/services/api';
+import { Dashboard } from '../../src/pages/Dashboard';
 import factory from '../utils/factory';
 
 interface Order {
@@ -30,7 +29,6 @@ interface Category {
 }
 
 const mockedNavigate = jest.fn();
-
 jest.mock('@react-navigation/native', () => {
   return {
     useNavigation: () => ({
@@ -39,9 +37,9 @@ jest.mock('@react-navigation/native', () => {
   };
 });
 
-describe('Dashboard', () => {
-  const apiMock = new AxiosMock(api);
+const apiMock = new AxiosMock(api);
 
+describe('Dashboard', () => {
   beforeEach(() => {
     mockedNavigate.mockClear();
   });
@@ -224,7 +222,7 @@ describe('Dashboard', () => {
 
     expect(getByTestId(`food-${order.id}`)).toBeTruthy();
     expect(mockedNavigate).toHaveBeenCalledTimes(1);
-    expect(mockedNavigate).toHaveBeenCalledWith('Food', {
+    expect(mockedNavigate).toHaveBeenCalledWith('FoodDetail', {
       id: order.id,
     });
   });
