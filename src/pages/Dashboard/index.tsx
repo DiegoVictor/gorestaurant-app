@@ -2,12 +2,12 @@ import React, { useEffect, useState } from 'react';
 import { Image, ScrollView } from 'react-native';
 import { Feather } from '@react-native-vector-icons/feather';
 import { useNavigation } from '@react-navigation/native';
-
+import { StackScreenProps } from '@react-navigation/stack';
 import Logo from '../../assets/logo-header.png';
 import { Input } from '../../components/Input';
-import api from '../../services/api';
-import formatValue from '../../utils/formatValue';
-
+import { api } from '../../services/api';
+import { formatValue } from '../../utils/formatValue';
+import { StackParamList } from '../../routes/app.routes';
 import {
   Container,
   Header,
@@ -26,8 +26,6 @@ import {
   FoodDescription,
   FoodPricing,
 } from './styles';
-import { StackScreenProps } from '@react-navigation/stack';
-import { StackParamList } from 'src/routes/app.routes';
 
 interface Food {
   id: number;
