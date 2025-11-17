@@ -4,7 +4,7 @@ import { Feather } from '@react-native-vector-icons/feather';
 import { useNavigation } from '@react-navigation/native';
 
 import Logo from '../../assets/logo-header.png';
-import SearchInput from '../../components/SearchInput';
+import { Input } from '../../components/Input';
 import api from '../../services/api';
 import formatValue from '../../utils/formatValue';
 
@@ -117,7 +117,7 @@ export const Dashboard: React.FC = () => {
         />
       </Header>
       <FilterContainer>
-        <SearchInput
+        <Input
           value={searchValue}
           onChangeText={setSearchValue}
           placeholder="Qual comida você procura?"
