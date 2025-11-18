@@ -6,7 +6,7 @@ export const Container = styled.View`
 
 export const Content = styled.View`
   flex: 1;
-  padding: 40px 40px 0px;
+  padding: 40px 40px 0px 40px;
   justify-content: space-around;
 `;
 
@@ -21,7 +21,7 @@ export const Title = styled.Text`
   line-height: 50px;
   color: #fff;
   margin-top: 80px;
-  width: 250px;
+  width: 275px;
   font-family: 'Poppins-Regular';
 `;
 
