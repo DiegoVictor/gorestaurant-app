@@ -15,7 +15,7 @@ import {
   Content,
 } from './styles';
 import { StackScreenProps } from '@react-navigation/stack';
-import { StackParamList } from 'src/routes/app.routes';
+import { StackParamList } from '../../routes/app.routes';
 
 type NavigateProps = StackScreenProps<StackParamList>['navigation'];
 
