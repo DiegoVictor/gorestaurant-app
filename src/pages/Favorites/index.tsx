@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Image } from 'react-native';
+import { Image, ListRenderItemInfo } from 'react-native';
 
 import api from '../../services/api';
 import formatValue from '../../utils/formatValue';
@@ -54,8 +54,7 @@ export const Favorites: React.FC = () => {
         <FoodList
           data={favorites}
           keyExtractor={(item: Food) => String(item.id)}
-          renderItem={({ item }: { item: Food }) => (
-            <Food activeOpacity={0.6}>
+          renderItem={({ item }: ListRenderItemInfo<Food>) => (
               <FoodImageContainer>
                 <Image
                   style={{ width: 88, height: 88 }}
