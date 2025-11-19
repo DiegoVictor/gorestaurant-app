@@ -5,6 +5,9 @@ import { NavigationContainer } from '@react-navigation/native';
 import { MaterialIcons } from '@react-native-vector-icons/material-icons';
 import { Feather } from '@react-native-vector-icons/feather';
 import { api } from '../services/api';
+import { BottomTabParamList, TabRouter } from './tab.routes';
+import { Home } from '../pages/Home';
+import { FoodDetail } from '../pages/FoodDetail';
 
 interface Params {
   id: number;
@@ -110,7 +113,7 @@ export const App: React.FC = () => {
         />
         <Stack.Screen
           name="TabMenu"
-          component={TabRoutes}
+          component={TabRouter}
           options={{
             headerShown: false,
             gestureEnabled: false,
@@ -118,7 +121,7 @@ export const App: React.FC = () => {
         />
         <Stack.Screen
           name="FoodDetail"
-          component={FoodDetails}
+          component={FoodDetail}
           options={({ navigation, route }) => ({
             headerLeft: () => (
               <Feather
