@@ -32,7 +32,7 @@ export type StackParamList = {
 
 const Stack = createStackNavigator<StackParamList>();
 
-const AppRoutes: React.FC = () => {
+export const App: React.FC = () => {
   const [foodId, setFoodId] = useState<number | undefined>();
   const [loading, setLoading] = useState(false);
   const [isFavorite, setIsFavorite] = useState(false);
@@ -172,4 +172,3 @@ const AppRoutes: React.FC = () => {
     </NavigationContainer>
   );
 };
-export default AppRoutes;
