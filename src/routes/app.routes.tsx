@@ -129,7 +129,7 @@ const AppRoutes: React.FC = () => {
               />
             ),
             headerLeftContainerStyle: {
-              marginLeft: 24,
+              paddingLeft: 24,
             },
             headerRight: () => {
               const { id } = route.params as Params;
@@ -152,7 +152,7 @@ const AppRoutes: React.FC = () => {
               );
             },
             headerRightContainerStyle: {
-              marginRight: 24,
+              paddingRight: 24,
             },
             headerTitle: 'Prato - Massas',
             headerTitleStyle: {
