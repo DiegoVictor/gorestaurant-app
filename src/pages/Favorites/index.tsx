@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Image, ListRenderItemInfo } from 'react-native';
 
-import api from '../../services/api';
+import { StackScreenProps } from '@react-navigation/stack';
 import formatValue from '../../utils/formatValue';
 
 import {
@@ -17,6 +17,7 @@ import {
   FoodDescription,
   FoodPricing,
 } from './styles';
+import { StackParamList } from '../../routes/app.routes';
 
 interface Food {
   id: number;
@@ -26,6 +27,8 @@ interface Food {
   thumbnail_url: string;
   formattedPrice: string;
 }
+
+type NavigateProps = StackScreenProps<StackParamList>['navigation'];
 
 export const Favorites: React.FC = () => {
   const [favorites, setFavorites] = useState<Food[]>([]);
