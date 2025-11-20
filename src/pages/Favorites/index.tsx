@@ -33,6 +33,12 @@ type NavigateProps = StackScreenProps<StackParamList>['navigation'];
 export const Favorites: React.FC = () => {
   const [favorites, setFavorites] = useState<Food[]>([]);
   const isFocused = useIsFocused();
+
+  const navigation = useNavigation<NavigateProps>();
+  async function handleNavigate(id: number): Promise<void> {
+    navigation.navigate('FoodDetail', { id });
+  }
+
   const loadFavorites = async (): Promise<void> => {
     const { data } = await api.get<Food[]>('favorites');
     setFavorites(
