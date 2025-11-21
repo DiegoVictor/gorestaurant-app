@@ -64,6 +64,11 @@ export const Favorites: React.FC = () => {
           data={favorites}
           keyExtractor={(item: Food) => String(item.id)}
           renderItem={({ item }: ListRenderItemInfo<Food>) => (
+            <Food
+              activeOpacity={0.6}
+              onPress={() => handleNavigate(item.id)}
+              testID={`food-${item.id}`}
+            >
               <FoodImageContainer>
                 <Image
                   style={{ width: 88, height: 88 }}
