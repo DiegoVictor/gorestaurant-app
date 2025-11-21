@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { Image, ListRenderItemInfo } from 'react-native';
-
+import { useIsFocused, useNavigation } from '@react-navigation/native';
 import { StackScreenProps } from '@react-navigation/stack';
-import formatValue from '../../utils/formatValue';
-
+import { api } from '../../services/api';
+import { formatValue } from '../../utils/formatValue';
 import {
   Container,
   Header,
