@@ -11,9 +11,9 @@ export const Input: React.FC<InputProps> = ({ value = '', ...rest }) => {
   const [isFocused, setIsFocused] = useState(false);
   const [isFilled, setIsFilled] = useState(false);
 
-  const handleInputFocus = useCallback(() => {
+  const handleInputFocus = () => {
     setIsFocused(true);
-  }, []);
+  };
 
   const handleInputBlur = useCallback(() => {
     setIsFocused(false);
