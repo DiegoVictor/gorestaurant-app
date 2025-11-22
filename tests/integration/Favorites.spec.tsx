@@ -1,9 +1,8 @@
 import React from 'react';
-import { render, waitFor } from '@testing-library/react-native';
+import { act, fireEvent, render, waitFor } from '@testing-library/react-native';
 import AxiosMock from 'axios-mock-adapter';
-
-import api from '../../src/services/api';
-import Favorites from '../../src/pages/Favorites';
+import { api } from '../../src/services/api';
+import { Favorites } from '../../src/pages/Favorites';
 import factory from '../utils/factory';
 
 interface Order {
@@ -24,12 +23,14 @@ interface Order {
 }
 
 const mockedNavigate = jest.fn();
-
 jest.mock('@react-navigation/native', () => {
   return {
     useNavigation: () => ({
       navigate: mockedNavigate,
     }),
+    useIsFocused: () => {
+      return true;
+    },
   };
 });
 
@@ -50,5 +51,21 @@ describe('Favorites', () => {
       expect(getByText(name)).toBeTruthy();
       expect(getByText(description)).toBeTruthy();
     });
+  });
+
+  it('should be able to see to food detail', async () => {
+    const order = await factory.attrs<Order>('Order');
+
+    apiMock.onGet('/favorites').reply(200, [order]);
+
+    const { getByTestId, findByText } = render(<Favorites />);
+
+    await waitFor(() => findByText(order.name));
+
+    await act(async () => {
+      fireEvent.press(getByTestId(`food-${order.id}`));
+    });
+
+    expect(mockedNavigate).toHaveBeenCalledWith('FoodDetail', { id: order.id });
   });
 });
