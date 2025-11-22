@@ -6,6 +6,7 @@
 [![styled-components](https://img.shields.io/badge/styled_components-6.1.19-db7b86?style=flat-square&logo=styled-components)](https://styled-components.com/)
 [![eslint](https://img.shields.io/badge/eslint-9.38.0-4b32c3?style=flat-square&logo=eslint)](https://eslint.org/)
 [![jest](https://img.shields.io/badge/jest-29.7.0-brightgreen?style=flat-square&logo=jest)](https://jestjs.io/)
+[![expo](https://img.shields.io/badge/expo-54.0.23-000000?style=flat-square&logo=expo)](https://expo.io/)
 [![coverage](https://img.shields.io/codecov/c/gh/DiegoVictor/gorestaurant-app?logo=codecov&style=flat-square)](https://codecov.io/gh/DiegoVictor/gorestaurant-app)
 [![MIT License](https://img.shields.io/badge/license-MIT-green?style=flat-square)](https://raw.githubusercontent.com/DiegoVictor/gorestaurant-app/main/LICENSE)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](http://makeapullrequest.com)<br>
